@@ -1,3 +1,28 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "mangrove",
+      "description": "A dense mangrove forest with roots submerged in water.",
+      "imageUrl": "https://picsum.photos/seed/mangrove/600/400",
+      "imageHint": "mangrove forest"
+    },
+    {
+      "id": "amazon",
+      "description": "The canopy of the Amazon rainforest seen from above.",
+      "imageUrl": "https://picsum.photos/seed/amazon/600/400",
+      "imageHint": "rainforest canopy"
+    },
+    {
+      "id": "agroforestry",
+      "description": "A coffee plantation with trees providing shade.",
+      "imageUrl": "https://picsum.photos/seed/agroforestry/600/400",
+      "imageHint": "coffee plantation"
+    },
+    {
+      "id": "boreal",
+      "description": "A boreal forest in autumn with a mix of coniferous and deciduous trees.",
+      "imageUrl": "https://picsum.photos/seed/boreal/600/400",
+      "imageHint": "boreal forest"
+    }
+  ]
 }
