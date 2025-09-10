@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Droplets } from "lucide-react";
 import { UserNav } from "./user-nav";
+import { ThemeSwitch } from "./theme-switch";
 
 type HeaderProps = {
   userRole: 'ngo' | 'buyer';
@@ -53,6 +54,7 @@ export function Header({ userRole }: HeaderProps) {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeSwitch />
           <UserNav userRole={userRole} />
         </div>
       </div>
