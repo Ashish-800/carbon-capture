@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useState, useTransition } from "react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +33,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { CalendarIcon, Loader2, Wand2, UploadCloud, CheckCircle } from "lucide-react";
+import { CalendarIcon, Loader2, Wand2, UploadCloud, CheckCircle, X } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCarbonCaptureEstimation, createProjectAction } from "@/app/actions";
@@ -63,6 +64,8 @@ export function ProjectForm() {
   const [isEstimating, setIsEstimating] = useState(false);
   const [estimationResult, setEstimationResult] =
     useState<EstimationResult | null>(null);
+  const [documentPreview, setDocumentPreview] = useState<string | null>(null);
+  const [documentName, setDocumentName] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -97,6 +100,8 @@ export function ProjectForm() {
           });
           form.reset();
           setEstimationResult(null);
+          setDocumentPreview(null);
+          setDocumentName(null);
           router.push('/ngo-dashboard');
       } else {
            toast({
@@ -139,6 +144,34 @@ export function ProjectForm() {
     }
   };
   
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      form.setValue("documents", file);
+      setDocumentName(file.name);
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setDocumentPreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setDocumentPreview(null);
+      }
+    }
+  };
+
+  const handleRemoveDocument = () => {
+    form.setValue("documents", null);
+    setDocumentPreview(null);
+    setDocumentName(null);
+     // Also reset the file input itself
+    const fileInput = document.getElementById('dropzone-file') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -272,22 +305,47 @@ export function ProjectForm() {
         <FormField
           control={form.control}
           name="documents"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Supporting Documents</FormLabel>
               <FormControl>
-                 <div className="flex items-center justify-center w-full">
+                {documentPreview ? (
+                  <div className="relative w-full h-48 rounded-lg overflow-hidden">
+                    <Image src={documentPreview} alt="Document preview" fill className="object-contain" />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-7 w-7"
+                      onClick={handleRemoveDocument}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ) : documentName ? (
+                   <div className="flex items-center justify-between w-full h-32 border-2 border-dashed rounded-lg p-4 bg-card">
+                      <p className="text-sm text-muted-foreground truncate">{documentName}</p>
+                       <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleRemoveDocument}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                   </div>
+                ) : (
+                  <div className="flex items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-secondary">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                            <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground" />
-                            <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-muted-foreground">CSV, XLSX, GeoJSON, SHP, TIF, JPG, MP4, or PDF</p>
-                        </div>
-                        <Input id="dropzone-file" type="file" className="hidden" 
-                          {...form.register("documents")}
-                        />
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground" />
+                        <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p className="text-xs text-muted-foreground">CSV, XLSX, GeoJSON, SHP, TIF, JPG, MP4, or PDF</p>
+                      </div>
+                      <Input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} />
                     </label>
-                </div> 
+                  </div>
+                )}
               </FormControl>
               <FormDescription>Upload project plans, geotagged photos, videos, or survey data.</FormDescription>
               <FormMessage />
