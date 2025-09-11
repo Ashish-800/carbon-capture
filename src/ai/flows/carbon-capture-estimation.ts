@@ -49,10 +49,13 @@ export async function estimateCarbonCapture(
 const estimateCarbonCapturePrompt = ai.definePrompt({
   name: 'estimateCarbonCapturePrompt',
   input: {schema: EstimateCarbonCaptureInputSchema},
-  output: {schema: EstimateCarbonCaptureOutputSchema},
+  output: {
+    format: 'json',
+    schema: EstimateCarbonCaptureOutputSchema,
+  },
   prompt: `You are an expert in carbon capture estimation, using satellite-derived NDVI data and NCCR (National Carbon Accounting Report) guidelines.
 
-  Based on the following information, estimate the carbon capture potential of the project:
+  Based on the following information, estimate the carbon capture potential of the project.
 
   NDVI Data: {{{ndviData}}}
   Restoration Type: {{{restorationType}}}
@@ -62,6 +65,14 @@ const estimateCarbonCapturePrompt = ai.definePrompt({
   Consider the NCCR guidelines and the specific characteristics of the restoration type to provide an accurate estimation.
 
   Provide the estimated carbon capture potential in tonnes per hectare per year, a confidence level for the estimation, and a summary of the data and methodology used.
+  
+  Please provide the output in the following JSON format:
+  
+  {
+    "estimatedCarbonCapture": <number>,
+    "confidenceLevel": "<High|Medium|Low>",
+    "supportingData": "<string>"
+  }
 `,
 });
 
