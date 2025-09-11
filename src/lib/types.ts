@@ -19,6 +19,7 @@ export type Project = {
     name: string;
     logoUrl: string;
   };
+  status: 'Pending Verification' | 'Verified' | 'Rejected';
 };
 
 export type CarbonCredit = {

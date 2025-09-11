@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState, useTransition } from "react";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +35,7 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon, Loader2, Wand2, UploadCloud, CheckCircle } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getCarbonCaptureEstimation } from "@/app/actions";
+import { getCarbonCaptureEstimation, createProjectAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
@@ -46,7 +47,7 @@ const formSchema = z.object({
     required_error: "A plantation date is required.",
   }),
   description: z.string().min(20, "Please provide a more detailed description."),
-  documents: z.any().optional(), // In a real app, use a file validation library
+  documents: z.any().optional(),
 });
 
 type EstimationResult = {
@@ -57,6 +58,7 @@ type EstimationResult = {
 
 export function ProjectForm() {
   const { toast } = useToast();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [isEstimating, setIsEstimating] = useState(false);
   const [estimationResult, setEstimationResult] =
@@ -75,15 +77,34 @@ export function ProjectForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    startTransition(() => {
-      console.log(values);
-      toast({
-        title: "Project Submitted!",
-        description: "Your project is now pending verification.",
-        action: <CheckCircle className="text-green-500" />,
+    startTransition(async () => {
+      const { projectName, latitude, longitude, restorationType, plantationDate, description } = values;
+      
+      const result = await createProjectAction({
+        name: projectName,
+        location: { lat: latitude, lng: longitude },
+        locationName: `Project near ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`, // Placeholder name
+        restorationType,
+        plantationDate,
+        description
       });
-      form.reset();
-      setEstimationResult(null);
+      
+      if (result.success) {
+          toast({
+            title: "Project Submitted!",
+            description: "Your project is now pending verification.",
+            action: <CheckCircle className="text-green-500" />,
+          });
+          form.reset();
+          setEstimationResult(null);
+          router.push('/ngo-dashboard');
+      } else {
+           toast({
+            variant: "destructive",
+            title: "Submission Failed",
+            description: result.error,
+          });
+      }
     });
   }
 
@@ -118,8 +139,6 @@ export function ProjectForm() {
     }
   };
   
-  const documentsRef = form.register("documents");
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -264,7 +283,9 @@ export function ProjectForm() {
                             <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                             <p className="text-xs text-muted-foreground">CSV, XLSX, GeoJSON, SHP, TIF, JPG, MP4, or PDF</p>
                         </div>
-                        <Input id="dropzone-file" type="file" className="hidden" {...documentsRef} />
+                        <Input id="dropzone-file" type="file" className="hidden" 
+                          {...form.register("documents")}
+                        />
                     </label>
                 </div> 
               </FormControl>

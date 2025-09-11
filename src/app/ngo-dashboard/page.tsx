@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PlusCircle, MapPin, Leaf } from "lucide-react";
+import { PlusCircle, MapPin, Leaf, CheckCircle, Hourglass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +13,19 @@ import { getProjectsByNgo } from "@/lib/db";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ProjectsMapView } from "@/components/projects-map-view";
+import { cn } from "@/lib/utils";
+
+const statusStyles = {
+    "Verified": "bg-green-100 text-green-800",
+    "Pending Verification": "bg-yellow-100 text-yellow-800",
+    "Rejected": "bg-red-100 text-red-800",
+};
+
+const statusIcons = {
+    "Verified": <CheckCircle className="h-3 w-3 mr-1.5" />,
+    "Pending Verification": <Hourglass className="h-3 w-3 mr-1.5 animate-spin" />,
+    "Rejected": <CheckCircle className="h-3 w-3 mr-1.5" />,
+}
 
 export default async function NgoDashboardPage() {
   // In a real app, you'd get the NGO ID from the authenticated user's session.
@@ -67,15 +80,21 @@ export default async function NgoDashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow">
+               <div className="flex justify-between items-center mb-2">
+                 <Badge variant="secondary" className="flex items-center">
+                    <Leaf className="h-3 w-3 mr-1.5 text-green-600" />
+                    {project.restorationType}
+                  </Badge>
+                  <Badge className={cn("flex items-center", statusStyles[project.status])}>
+                    {statusIcons[project.status]}
+                    {project.status}
+                  </Badge>
+              </div>
               <p className="text-sm text-muted-foreground line-clamp-3">
                 {project.description}
               </p>
             </CardContent>
             <CardFooter className="flex justify-between items-center">
-               <Badge variant="secondary" className="flex items-center">
-                  <Leaf className="h-3 w-3 mr-1.5 text-green-600" />
-                  {project.restorationType}
-                </Badge>
               <Button variant="outline" size="sm">View Details</Button>
             </CardFooter>
           </Card>

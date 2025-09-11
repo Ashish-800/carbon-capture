@@ -8,6 +8,7 @@ import {
   QueryDocumentSnapshot,
   query,
   where,
+  addDoc,
 } from "firebase/firestore";
 import type { Project, CarbonCredit } from "@/lib/types";
 
@@ -48,6 +49,19 @@ const docToCredit = (
   } as CarbonCredit;
 };
 
+export async function addProject(projectData: Omit<Project, 'id'>): Promise<Project> {
+  try {
+    const projectsCol = collection(db, "projects");
+    const docRef = await addDoc(projectsCol, projectData);
+    return {
+      id: docRef.id,
+      ...projectData,
+    };
+  } catch (error) {
+    console.error("Error adding project:", error);
+    throw new Error("Could not add project to the database.");
+  }
+}
 
 export async function getProjects(): Promise<Project[]> {
   try {
