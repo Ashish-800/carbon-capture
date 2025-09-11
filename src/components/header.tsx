@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Droplets, LogOut } from "lucide-react";
 import { UserNav } from "./user-nav";
