@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { mockProjects } from "@/lib/mock-data";
+import { getProjects } from "@/lib/db";
 import { MapPin, Leaf, Sprout } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
-export default function ProjectRegistryPage() {
+export default async function ProjectRegistryPage() {
+  const projects = await getProjects();
+
   return (
     <div className="container mx-auto py-8">
       <div className="space-y-2 mb-8 text-center">
@@ -27,7 +29,7 @@ export default function ProjectRegistryPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {mockProjects.map((project) => (
+        {projects.map((project) => (
           <Card key={project.id} className="flex flex-col hover:shadow-lg transition-shadow duration-300">
             <CardHeader className="p-0">
               <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
