@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PortfolioChart } from "./_components/portfolio-chart";
 import { ProjectsMapView } from "@/components/projects-map-view";
-import { mockProjects } from "@/lib/mock-data";
+import { getProjects } from "@/lib/db";
 
-export default function BuyerDashboardPage() {
-  // Simulating portfolio projects by taking a slice of mock data
-  const portfolioProjects = mockProjects.slice(0, 3);
+export default async function BuyerDashboardPage() {
+  const allProjects = await getProjects();
+  // Simulating portfolio projects by taking a slice of data from the DB
+  const portfolioProjects = allProjects.slice(0, 3);
 
   return (
     <div className="container mx-auto py-8">

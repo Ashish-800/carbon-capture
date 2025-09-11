@@ -15,6 +15,7 @@ export type Project = {
   creditsAvailable: number;
   description: string;
   ngo: {
+    id: string;
     name: string;
     logoUrl: string;
   };
@@ -25,6 +26,7 @@ export type CarbonCredit = {
   projectId: string;
   projectName: string;
   buyer: string; 
+  buyerId: string;
   purchaseDate: Date;
   tonnesCO2: number;
 };

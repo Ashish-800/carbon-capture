@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { mockProjects } from "@/lib/mock-data";
+import { getProjectById } from "@/lib/db";
 import { MapPin, Leaf, Calendar, Sprout, ShieldCheck, HardHat } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -8,8 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapView } from "./_components/map-view";
 import { PurchaseCredits } from "./_components/purchase-credits";
 
-export default function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const project = mockProjects.find((p) => p.id === params.id);
+export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
+  const project = await getProjectById(params.id);
 
   if (!project) {
     notFound();

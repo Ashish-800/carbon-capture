@@ -9,13 +9,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { mockProjects } from "@/lib/mock-data";
+import { getProjectsByNgo } from "@/lib/db";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { ProjectsMapView } from "@/components/projects-map-view";
 
-export default function NgoDashboardPage() {
-  const ngoProjects = mockProjects.slice(0, 2); // Simulating projects for one NGO
+export default async function NgoDashboardPage() {
+  // In a real app, you'd get the NGO ID from the authenticated user's session.
+  // For this prototype, we'll use a hardcoded ID.
+  const ngoId = "ngo_amazonas_alive";
+  const ngoProjects = await getProjectsByNgo(ngoId);
 
   return (
     <div className="container mx-auto py-8">

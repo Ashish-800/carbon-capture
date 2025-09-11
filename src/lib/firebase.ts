@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApp, getApps } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -19,8 +19,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-// The following line is commented out until Firestore is enabled in the Firebase console.
-// const db = getFirestore(app);
-const db = {}; // Temporary empty object to prevent downstream errors
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
-export { app, auth, db };
+export { app, auth, db, googleProvider };
