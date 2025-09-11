@@ -19,6 +19,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const db = getFirestore(app);
+// The following line is commented out until Firestore is enabled in the Firebase console.
+// const db = getFirestore(app);
+const db = {}; // Temporary empty object to prevent downstream errors
 
 export { app, auth, db };
