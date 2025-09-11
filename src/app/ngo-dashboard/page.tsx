@@ -12,6 +12,7 @@ import {
 import { mockProjects } from "@/lib/mock-data";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { ProjectsMapView } from "@/components/projects-map-view";
 
 export default function NgoDashboardPage() {
   const ngoProjects = mockProjects.slice(0, 2); // Simulating projects for one NGO
@@ -28,6 +29,22 @@ export default function NgoDashboardPage() {
         </Button>
       </div>
       
+       <div className="mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Project Locations</CardTitle>
+            <CardDescription>
+              A map of all your registered project sites.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="h-96 w-full">
+              <ProjectsMapView projects={ngoProjects} />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {ngoProjects.map((project) => (
           <Card key={project.id} className="flex flex-col">

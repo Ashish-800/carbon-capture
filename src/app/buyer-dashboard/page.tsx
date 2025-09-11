@@ -9,8 +9,13 @@ import { DollarSign, Leaf, CheckCircle, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PortfolioChart } from "./_components/portfolio-chart";
+import { ProjectsMapView } from "@/components/projects-map-view";
+import { mockProjects } from "@/lib/mock-data";
 
 export default function BuyerDashboardPage() {
+  // Simulating portfolio projects by taking a slice of mock data
+  const portfolioProjects = mockProjects.slice(0, 3);
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-headline font-bold mb-6">
@@ -72,6 +77,22 @@ export default function BuyerDashboardPage() {
             <p className="text-xs text-muted-foreground">
               Price stable this quarter
             </p>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="font-headline">Global Project Portfolio</CardTitle>
+            <CardDescription>
+              Locations of your supported carbon capture projects.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="h-96 w-full">
+              <ProjectsMapView projects={portfolioProjects} />
+            </div>
           </CardContent>
         </Card>
       </div>
