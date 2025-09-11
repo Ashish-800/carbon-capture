@@ -260,13 +260,13 @@ export function ProjectForm() {
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground" />
                             <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-muted-foreground">CSV, PNG, JPG or PDF</p>
+                            <p className="text-xs text-muted-foreground">CSV, GeoJSON, SHP, JPG, TIF, MP4 or PDF</p>
                         </div>
                         <Input id="dropzone-file" type="file" className="hidden" {...field} />
                     </label>
                 </div> 
               </FormControl>
-              <FormDescription>Upload project plans, land deeds, or photos.</FormDescription>
+              <FormDescription>Upload project plans, geotagged photos, videos, or survey data.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
