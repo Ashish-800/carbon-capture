@@ -20,7 +20,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import type { Project } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -31,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 export function PurchaseCredits({ project }: { project: Project }) {
   const [quantity, setQuantity] = useState(10);
   const [creditId, setCreditId] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPurchasing, setIsPurchasing] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -57,6 +57,7 @@ export function PurchaseCredits({ project }: { project: Project }) {
     try {
       await sendCertificateEmailAction(creditData, project, buyerEmail);
       setCreditId(newCreditId);
+      setIsDialogOpen(true);
       toast({
         title: "Email Sent!",
         description: "Your certificate has been sent to your email.",
@@ -73,7 +74,12 @@ export function PurchaseCredits({ project }: { project: Project }) {
   };
 
   const handleViewCredits = () => {
+    setIsDialogOpen(false);
     router.push('/my-credits');
+  }
+  
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   }
 
   return (
@@ -97,13 +103,11 @@ export function PurchaseCredits({ project }: { project: Project }) {
             disabled={isPurchasing}
           />
         </div>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
+        <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handlePurchase} disabled={isPurchasing}>
               {isPurchasing && <Loader2 className="mr-2 animate-spin" />}
               Purchase Credits
             </Button>
-          </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-4">
@@ -119,7 +123,7 @@ export function PurchaseCredits({ project }: { project: Project }) {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="sm:justify-center">
-              <AlertDialogCancel>Close</AlertDialogCancel>
+              <AlertDialogCancel onClick={handleCloseDialog}>Close</AlertDialogCancel>
               <AlertDialogAction onClick={handleViewCredits}>
                 View My Credits
               </AlertDialogAction>
