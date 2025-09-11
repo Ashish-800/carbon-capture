@@ -18,7 +18,7 @@ export function Header({ userRole }: HeaderProps) {
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Droplets className="h-6 w-6 text-accent" />
             <span className="font-bold font-headline sm:inline-block">
-              BlueCarbonChain
+              Carbon Capture
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">

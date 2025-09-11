@@ -28,7 +28,7 @@ export function MapView({ center }: MapViewProps) {
         defaultZoom={9}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
-        mapId={"bluecarbonchain-map"}
+        mapId={"carboncapture-map"}
       >
         <Marker position={center} />
       </Map>

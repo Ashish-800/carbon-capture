@@ -22,7 +22,7 @@ export function Certificate({ credit }: { credit: EnrichedCredit }) {
           <div>
             <div className="flex items-center text-primary mb-1">
                 <Droplets className="h-8 w-8 mr-2 text-accent" />
-                <h1 className="text-2xl font-headline font-bold">BlueCarbonChain</h1>
+                <h1 className="text-2xl font-headline font-bold">Carbon Capture</h1>
             </div>
             <p className="text-sm text-muted-foreground">Official Certificate of Carbon Credit Retirement</p>
           </div>

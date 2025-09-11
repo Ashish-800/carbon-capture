@@ -55,7 +55,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
                         <ShieldCheck className="h-8 w-8 text-accent flex-shrink-0 mt-1" />
                         <div>
                             <h3 className="font-semibold">Verification Status</h3>
-                            <p className="text-muted-foreground">Verified by BlueCarbonChain</p>
+                            <p className="text-muted-foreground">Verified by Carbon Capture</p>
                         </div>
                     </div>
                 </CardContent>

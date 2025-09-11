@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: 'BlueCarbonChain',
+  title: 'Carbon Capture',
   description: 'A platform for transparent carbon credit verification and trading.',
 };
 

@@ -37,7 +37,7 @@ export default function LoginPage() {
       </div>
       <div className="flex items-center justify-center mb-8 text-primary">
         <Droplets className="h-10 w-10 mr-3 text-accent" />
-        <h1 className="text-4xl font-headline font-bold">BlueCarbonChain</h1>
+        <h1 className="text-4xl font-headline font-bold">Carbon Capture</h1>
       </div>
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
