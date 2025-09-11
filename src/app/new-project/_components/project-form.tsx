@@ -69,6 +69,7 @@ export function ProjectForm() {
       latitude: 0,
       longitude: 0,
       restorationType: "Reforestation",
+      plantationDate: new Date(),
       description: "",
     },
   });
