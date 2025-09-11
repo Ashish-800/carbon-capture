@@ -1,13 +1,18 @@
 import Link from "next/link";
-import { Droplets } from "lucide-react";
+import { Droplets, LogOut } from "lucide-react";
 import { UserNav } from "./user-nav";
 import { ThemeSwitch } from "./theme-switch";
+import { useAuth } from "@/context/auth-context";
+import {
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 
 type HeaderProps = {
   userRole: 'ngo' | 'buyer';
 }
 
 export function Header({ userRole }: HeaderProps) {
+  const { signOut } = useAuth();
   const isNgo = userRole === 'ngo';
   const dashboardLink = isNgo ? "/ngo-dashboard" : "/buyer-dashboard";
 

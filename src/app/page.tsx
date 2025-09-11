@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Leaf, Building, Droplets } from "lucide-react";
+import { Leaf, Building, Droplets, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,21 +14,64 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ThemeSwitch } from "@/components/theme-switch";
+import { useAuth } from "@/context/auth-context";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [role, setRole] = React.useState("ngo");
+  const { toast } = useToast();
+  const [email, setEmail] = React.useState("demo@example.com");
+  const [password, setPassword] = React.useState("password");
+  const [loading, setLoading] = React.useState(false);
+  const { user, loading: authLoading } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  React.useEffect(() => {
+    if (!authLoading && user) {
+        if (user.emailVerified) {
+             // A simple way to distinguish roles without custom claims for now
+            if (user.displayName?.includes("NGO")) {
+                router.push("/ngo-dashboard");
+            } else {
+                router.push("/buyer-dashboard");
+            }
+        } else {
+            router.push("/verify-email");
+        }
+    }
+  }, [user, authLoading, router]);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (role === "ngo") {
-      router.push("/ngo-dashboard");
-    } else {
-      router.push("/buyer-dashboard");
+    setLoading(true);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential.user.emailVerified) {
+        router.push("/verify-email");
+      }
+      // The useEffect hook will handle redirection for verified users.
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: error.message,
+      });
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (authLoading || user) {
+    return (
+       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="mt-4 text-muted-foreground">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 relative">
@@ -43,7 +86,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle className="font-headline text-2xl">Welcome Back</CardTitle>
           <CardDescription>
-            Select your role to sign in to your dashboard.
+            Enter your credentials to sign in to your dashboard.
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
@@ -54,54 +97,25 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="name@example.com"
-                defaultValue="demo@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" defaultValue="password" />
-            </div>
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <RadioGroup
-                defaultValue="ngo"
-                className="grid grid-cols-2 gap-4"
-                value={role}
-                onValueChange={setRole}
-              >
-                <div>
-                  <RadioGroupItem
-                    value="ngo"
-                    id="ngo"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="ngo"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                  >
-                    <Leaf className="mb-3 h-6 w-6" />
-                    NGO / Field Worker
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="buyer"
-                    id="buyer"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="buyer"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
-                  >
-                    <Building className="mb-3 h-6 w-6" />
-                    Corporate Buyer
-                  </Label>
-                </div>
-              </RadioGroup>
+              <Input 
+                id="password" 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+              />
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Sign In
             </Button>
           </CardFooter>
@@ -109,9 +123,9 @@ export default function LoginPage() {
       </Card>
       <p className="text-sm text-muted-foreground mt-6">
         Don't have an account?{" "}
-        <a href="#" className="underline text-primary hover:text-accent">
+        <Link href="/signup" className="underline text-primary hover:text-accent">
           Sign Up
-        </a>
+        </Link>
       </p>
     </main>
   );

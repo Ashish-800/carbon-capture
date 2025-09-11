@@ -9,15 +9,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Link from "next/link";
+import { useAuth } from "@/context/auth-context";
 
 type UserNavProps = {
   userRole: 'ngo' | 'buyer';
 }
 
 export function UserNav({ userRole }: UserNavProps) {
+  const { user, signOut } = useAuth();
+
   const userName = userRole === 'ngo' ? 'NGO Admin' : 'Sustainability Lead';
-  const userEmail = userRole === 'ngo' ? 'admin@conservation.org' : 'lead@globaltech.com';
+  const userEmail = user?.email || (userRole === 'ngo' ? 'admin@conservation.org' : 'lead@globaltech.com');
   const userInitials = userRole === 'ngo' ? 'NA' : 'SL';
 
   return (
@@ -45,8 +47,8 @@ export function UserNav({ userRole }: UserNavProps) {
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/">Log out</Link>
+        <DropdownMenuItem onClick={signOut}>
+          Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
