@@ -24,22 +24,55 @@ import {
 } from "@/components/ui/alert-dialog";
 import type { Project } from "@/lib/types";
 import { useRouter } from "next/navigation";
-import { PartyPopper } from "lucide-react";
+import { Loader2, PartyPopper } from "lucide-react";
+import { sendCertificateEmailAction } from "@/app/actions";
+import { useToast } from "@/hooks/use-toast";
 
 export function PurchaseCredits({ project }: { project: Project }) {
   const [quantity, setQuantity] = useState(10);
   const [creditId, setCreditId] = useState("");
+  const [isPurchasing, setIsPurchasing] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
   
-  const handlePurchase = () => {
-    // Simulate credit ID generation
+  const handlePurchase = async () => {
+    setIsPurchasing(true);
+    // Simulate credit ID generation and API call
     const newCreditId = `BCC-${project.id.toUpperCase()}-${Date.now().toString().slice(-6)}`;
-    setCreditId(newCreditId);
-    // In a real app, you would call an API here.
+    
+    // In a real app, you would get the buyer's email from their session.
+    // For this prototype, we'll use a mock email.
+    const buyerEmail = 'lead@globaltech.com';
+    const buyerName = 'Sustainability Lead';
+
+    const creditData = {
+      id: newCreditId,
+      projectId: project.id,
+      projectName: project.name,
+      buyer: buyerName,
+      purchaseDate: new Date(),
+      tonnesCO2: quantity,
+    };
+    
+    try {
+      await sendCertificateEmailAction(creditData, project, buyerEmail);
+      setCreditId(newCreditId);
+      toast({
+        title: "Email Sent!",
+        description: "Your certificate has been sent to your email.",
+      });
+    } catch (error) {
+       toast({
+        variant: "destructive",
+        title: "Email Failed",
+        description: "Could not send the certificate email.",
+      });
+    } finally {
+        setIsPurchasing(false);
+    }
   };
 
   const handleViewCredits = () => {
-    // Assuming a successful purchase, navigate to the credits page
     router.push('/my-credits');
   }
 
@@ -61,11 +94,13 @@ export function PurchaseCredits({ project }: { project: Project }) {
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value, 10) || 1))}
             min="1"
             max={project.creditsAvailable}
+            disabled={isPurchasing}
           />
         </div>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handlePurchase}>
+            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handlePurchase} disabled={isPurchasing}>
+              {isPurchasing && <Loader2 className="mr-2 animate-spin" />}
               Purchase Credits
             </Button>
           </AlertDialogTrigger>
@@ -80,7 +115,7 @@ export function PurchaseCredits({ project }: { project: Project }) {
                 <br /><br />
                 Your unique Credit Token ID is:
                  <p className="font-mono text-primary bg-secondary p-2 rounded-md my-2 text-sm">{creditId}</p>
-                A certificate has been generated for your records.
+                A certificate has been generated and sent to your email for your records.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="sm:justify-center">
