@@ -1,9 +1,8 @@
 "use server";
 import { estimateCarbonCapture, EstimateCarbonCaptureInput } from '@/ai/flows/carbon-capture-estimation';
 import { sendEmail } from '@/ai/flows/send-email';
-import { Certificate } from '@/app/my-credits/_components/certificate';
 import type { CarbonCredit, Project } from '@/lib/types';
-import ReactDOMServer from 'react-dom/server';
+import { generateCertificateHtml } from '@/lib/generate-certificate-html';
 
 export async function getCarbonCaptureEstimation(input: EstimateCarbonCaptureInput) {
   try {
@@ -21,15 +20,7 @@ export async function sendCertificateEmailAction(
   buyerEmail: string
 ) {
   try {
-    const enrichedCredit = {
-      ...credit,
-      locationName: project.locationName,
-      ngoName: project.ngo.name,
-    };
-
-    const certificateHtml = ReactDOMServer.renderToString(
-      <Certificate credit={enrichedCredit} />
-    );
+    const certificateHtml = generateCertificateHtml(credit, project);
 
     const emailResult = await sendEmail({
       to: buyerEmail,
