@@ -56,10 +56,12 @@ export default function SignupPage() {
       const user = userCredential.user;
       
       const isNgo = role === 'ngo';
+      // Set displayName to distinguish between user roles
       await updateProfile(user, {
         displayName: isNgo ? 'NGO User' : 'Buyer User',
       });
       
+      // Send verification email to the new user
       await sendEmailVerification(user);
       
       toast({
@@ -67,7 +69,8 @@ export default function SignupPage() {
         description: "A verification email has been sent to your address.",
       });
       
-      // Redirect NGO users to the details form, others to the generic verify page.
+      // Redirect NGO users to the detailed profile form.
+      // Redirect Buyer users to the generic email verification page.
       if (isNgo) {
         router.push("/signup/ngo-details");
       } else {
@@ -104,18 +107,19 @@ export default function SignupPage() {
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
              <div className="space-y-2">
-              <Label>Role</Label>
+              <Label>Select Your Role</Label>
               <RadioGroup
                 defaultValue="ngo"
                 className="grid grid-cols-2 gap-4"
                 value={role}
                 onValueChange={setRole}
+                disabled={loading}
               >
                 <div>
                   <RadioGroupItem value="ngo" id="ngo" className="peer sr-only" />
                   <Label
                     htmlFor="ngo"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer"
                   >
                     <Leaf className="mb-3 h-6 w-6" />
                     NGO / Field Worker
@@ -125,7 +129,7 @@ export default function SignupPage() {
                   <RadioGroupItem value="buyer" id="buyer" className="peer sr-only" />
                   <Label
                     htmlFor="buyer"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                    className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent/10 hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary cursor-pointer"
                   >
                     <Building className="mb-3 h-6 w-6" />
                     Corporate Buyer
@@ -172,7 +176,7 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-sin" />}
               Create Account
             </Button>
           </CardFooter>
