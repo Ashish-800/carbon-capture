@@ -1,0 +1,15 @@
+
+import { NgoDetailsForm } from "./_components/ngo-details-form";
+import { Droplets } from "lucide-react";
+
+export default function NgoDetailsPage() {
+  return (
+    <div className="container mx-auto max-w-4xl py-10 flex flex-col items-center">
+       <div className="flex items-center justify-center mb-8 text-primary">
+        <Droplets className="h-10 w-10 mr-3 text-accent" />
+        <h1 className="text-4xl font-headline font-bold">Carbon Capture</h1>
+      </div>
+      <NgoDetailsForm />
+    </div>
+  );
+}

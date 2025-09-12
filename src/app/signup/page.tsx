@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -54,10 +55,9 @@ export default function SignupPage() {
       
       const user = userCredential.user;
       
-      // We use displayName to store a hint of the user's role.
-      // In a real app, you'd use custom claims for robust role management.
+      const isNgo = role === 'ngo';
       await updateProfile(user, {
-        displayName: role === 'ngo' ? 'NGO User' : 'Buyer User',
+        displayName: isNgo ? 'NGO User' : 'Buyer User',
       });
       
       await sendEmailVerification(user);
@@ -67,7 +67,12 @@ export default function SignupPage() {
         description: "A verification email has been sent to your address.",
       });
       
-      router.push("/verify-email");
+      // Redirect NGO users to the details form, others to the generic verify page.
+      if (isNgo) {
+        router.push("/signup/ngo-details");
+      } else {
+        router.push("/verify-email");
+      }
 
     } catch (error: any) {
       toast({
