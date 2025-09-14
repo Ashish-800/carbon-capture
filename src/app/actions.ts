@@ -1,3 +1,4 @@
+
 "use server";
 import { revalidatePath } from "next/cache";
 import { estimateCarbonCapture, EstimateCarbonCaptureInput } from '@/ai/flows/carbon-capture-estimation';
@@ -37,7 +38,11 @@ export async function sendCertificateEmailAction(
   }
 }
 
-export async function createProjectAction(projectData: Omit<Project, 'id' | 'status' | 'imageUrl' | 'imageHint' | 'ngo' | 'creditsAvailable' | 'ndvi' | 'estimatedCarbonCapture'>) {
+type CreateProjectData = Omit<Project, 'id' | 'status' | 'imageUrl' | 'imageHint' | 'ngo' | 'creditsAvailable' | 'ndvi' | 'estimatedCarbonCapture'> & {
+    imageDataUrl: string;
+};
+
+export async function createProjectAction(projectData: CreateProjectData) {
     try {
         // In a real app, NGO details would come from the user's session.
         const ngoDetails = {
@@ -48,12 +53,16 @@ export async function createProjectAction(projectData: Omit<Project, 'id' | 'sta
         
         // Mocking some data that would normally be calculated or assigned post-verification
         const newProjectData: Omit<Project, 'id'> = {
-            ...projectData,
+            name: projectData.name,
+            location: projectData.location,
+            locationName: projectData.locationName,
+            restorationType: projectData.restorationType,
+            plantationDate: projectData.plantationDate,
+            description: projectData.description,
             ngo: ngoDetails,
             status: 'Pending Verification',
-            // Assign a random placeholder image for now
-            imageUrl: `https://picsum.photos/seed/${Math.random()}/600/400`,
-            imageHint: 'forest',
+            imageUrl: projectData.imageDataUrl, // Use the uploaded image data URL
+            imageHint: 'restoration project', // Generic hint for user-uploaded images
             // Default values for fields that are determined later in the process
             creditsAvailable: 0,
             ndvi: 0.65, // Using a mock average NDVI

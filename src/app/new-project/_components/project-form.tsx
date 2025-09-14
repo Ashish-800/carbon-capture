@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,6 +39,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getCarbonCaptureEstimation, createProjectAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
+import type { Project } from "@/lib/types";
 
 const formSchema = z.object({
   projectName: z.string().min(5, "Project name must be at least 5 characters."),
@@ -48,7 +50,7 @@ const formSchema = z.object({
     required_error: "A plantation date is required.",
   }),
   description: z.string().min(20, "Please provide a more detailed description."),
-  documents: z.any().optional(),
+  image: z.any().refine(file => file, "An image is required."),
 });
 
 type EstimationResult = {
@@ -57,6 +59,14 @@ type EstimationResult = {
   supportingData: string;
 };
 
+// Helper to convert file to base64
+const toBase64 = (file: File): Promise<string> => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+});
+
 export function ProjectForm() {
   const { toast } = useToast();
   const router = useRouter();
@@ -64,8 +74,7 @@ export function ProjectForm() {
   const [isEstimating, setIsEstimating] = useState(false);
   const [estimationResult, setEstimationResult] =
     useState<EstimationResult | null>(null);
-  const [documentPreview, setDocumentPreview] = useState<string | null>(null);
-  const [documentName, setDocumentName] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,20 +85,24 @@ export function ProjectForm() {
       restorationType: "Reforestation",
       plantationDate: new Date(),
       description: "",
+      image: null,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { projectName, latitude, longitude, restorationType, plantationDate, description } = values;
+      const { projectName, latitude, longitude, restorationType, plantationDate, description, image } = values;
       
+      const imageDataUrl = await toBase64(image);
+
       const result = await createProjectAction({
         name: projectName,
         location: { lat: latitude, lng: longitude },
         locationName: `Project near ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`, // Placeholder name
         restorationType,
         plantationDate,
-        description
+        description,
+        imageDataUrl,
       });
       
       if (result.success) {
@@ -100,8 +113,7 @@ export function ProjectForm() {
           });
           form.reset();
           setEstimationResult(null);
-          setDocumentPreview(null);
-          setDocumentName(null);
+          setImagePreview(null);
           router.push('/ngo-dashboard');
       } else {
            toast({
@@ -147,25 +159,18 @@ export function ProjectForm() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      form.setValue("documents", file);
-      setDocumentName(file.name);
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setDocumentPreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        setDocumentPreview(null);
-      }
+      form.setValue("image", file, { shouldValidate: true });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleRemoveDocument = () => {
-    form.setValue("documents", null);
-    setDocumentPreview(null);
-    setDocumentName(null);
-     // Also reset the file input itself
+  const handleRemoveImage = () => {
+    form.setValue("image", null, { shouldValidate: true });
+    setImagePreview(null);
     const fileInput = document.getElementById('dropzone-file') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
@@ -304,50 +309,38 @@ export function ProjectForm() {
         
         <FormField
           control={form.control}
-          name="documents"
+          name="image"
           render={() => (
             <FormItem>
-              <FormLabel>Supporting Documents</FormLabel>
+              <FormLabel>Project Image</FormLabel>
               <FormControl>
-                {documentPreview ? (
+                {imagePreview ? (
                   <div className="relative w-full h-48 rounded-lg overflow-hidden">
-                    <Image src={documentPreview} alt="Document preview" fill className="object-contain" />
+                    <Image src={imagePreview} alt="Image preview" fill className="object-contain" />
                     <Button
                       type="button"
                       variant="destructive"
                       size="icon"
                       className="absolute top-2 right-2 h-7 w-7"
-                      onClick={handleRemoveDocument}
+                      onClick={handleRemoveImage}
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
-                ) : documentName ? (
-                   <div className="flex items-center justify-between w-full h-32 border-2 border-dashed rounded-lg p-4 bg-card">
-                      <p className="text-sm text-muted-foreground truncate">{documentName}</p>
-                       <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleRemoveDocument}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                   </div>
                 ) : (
                   <div className="flex items-center justify-center w-full">
                     <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-secondary">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <UploadCloud className="w-8 h-8 mb-4 text-muted-foreground" />
                         <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p className="text-xs text-muted-foreground">CSV, XLSX, GeoJSON, SHP, TIF, JPG, MP4, or PDF</p>
+                        <p className="text-xs text-muted-foreground">PNG, JPG, or JPEG (Max 5MB)</p>
                       </div>
-                      <Input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} />
+                      <Input id="dropzone-file" type="file" className="hidden" onChange={handleFileChange} accept="image/png, image/jpeg" />
                     </label>
                   </div>
                 )}
               </FormControl>
-              <FormDescription>Upload project plans, geotagged photos, videos, or survey data.</FormDescription>
+              <FormDescription>Upload a representative photo of your project site.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
