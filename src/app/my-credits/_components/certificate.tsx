@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download, Droplets, Leaf } from "lucide-react";
@@ -20,7 +21,7 @@ export function Certificate({ credit }: { credit: EnrichedCredit }) {
       <div className="p-8">
         <div className="flex justify-between items-start">
           <div>
-            <div className="flex items-center text-primary mb-1">
+            <div className="flex items-center text-accent mb-1">
                 <Droplets className="h-10 w-10 mr-2" />
                 <h1 className="text-2xl font-headline font-bold">Carbon Capture</h1>
             </div>

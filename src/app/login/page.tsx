@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -78,7 +79,7 @@ export default function LoginPage() {
       <div className="absolute top-4 right-4">
         <ThemeSwitch />
       </div>
-      <div className="flex items-center justify-center mb-8 text-primary">
+      <div className="flex items-center justify-center mb-8 text-accent">
         <Droplets className="h-12 w-12 mr-3" />
         <h1 className="text-4xl font-headline font-bold">Carbon Capture</h1>
       </div>
