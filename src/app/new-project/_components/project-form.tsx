@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -83,11 +83,16 @@ export function ProjectForm() {
       latitude: 0,
       longitude: 0,
       restorationType: "Reforestation",
-      plantationDate: new Date(),
+      plantationDate: undefined,
       description: "",
       image: null,
     },
   });
+
+  useEffect(() => {
+    form.setValue("plantationDate", new Date());
+  }, [form]);
+
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
