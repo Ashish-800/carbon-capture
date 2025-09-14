@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { PlusCircle, MapPin, Leaf, CheckCircle, Hourglass } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,22 +46,6 @@ export default async function NgoDashboardPage() {
         </Button>
       </div>
       
-       <div className="mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="font-headline">Project Locations</CardTitle>
-            <CardDescription>
-              A map of all your registered project sites.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="h-96 w-full">
-              <ProjectsMapView projects={ngoProjects} />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {ngoProjects.map((project) => (
           <Card key={project.id} className="flex flex-col">
