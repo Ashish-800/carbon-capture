@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/auth-context";
+import { LayoutDashboard, LogOut, User as UserIcon } from "lucide-react";
 
 type UserNavProps = {
   userRole: 'ngo' | 'buyer';
@@ -20,16 +21,18 @@ type UserNavProps = {
 export function UserNav({ userRole }: UserNavProps) {
   const { user, signOut } = useAuth();
 
-  const userName = userRole === 'ngo' ? 'NGO Admin' : 'Sustainability Lead';
-  const userEmail = user?.email || (userRole === 'ngo' ? 'admin@conservation.org' : 'lead@globaltech.com');
-  const userInitials = userRole === 'ngo' ? 'NA' : 'SL';
+  const isNgo = userRole === 'ngo';
+  const dashboardLink = isNgo ? "/ngo-dashboard" : "/buyer-dashboard";
+  const userName = isNgo ? 'NGO Admin' : 'Sustainability Lead';
+  const userEmail = user?.email || (isNgo ? 'admin@conservation.org' : 'lead@globaltech.com');
+  const userInitials = isNgo ? 'NA' : 'SL';
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="https://picsum.photos/seed/avatar/32/32" alt="User avatar" data-ai-hint="avatar" />
+            <AvatarImage src={`https://picsum.photos/seed/${isNgo ? 'ngo_logo' : 'avatar'}/32/32`} alt="User avatar" data-ai-hint="avatar" />
             <AvatarFallback>{userInitials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -46,12 +49,15 @@ export function UserNav({ userRole }: UserNavProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/profile">Profile</Link>
+            <Link href={dashboardLink}><LayoutDashboard className="mr-2" />Dashboard</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/profile"><UserIcon className="mr-2" />Profile</Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOut}>
+          <LogOut className="mr-2" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
