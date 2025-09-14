@@ -1,7 +1,7 @@
 
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Leaf, Building, Users } from "lucide-react";
+import { ArrowRight, CheckCircle, Leaf, Building, Users, Shield, TrendingUp, Globe } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -56,41 +56,53 @@ export default function GetStartedPage() {
           </div>
         </section>
 
-        {/* Choose Role Section */}
-        <section id="choose-role" className="py-16 md:py-24">
+        {/* Features Section */}
+        <section id="features" className="py-16 md:py-24">
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-headline font-bold">Choose Your Role</h2>
-              <p className="text-muted-foreground mt-2">Join our platform as either a project implementer or corporate buyer</p>
+              <h2 className="text-3xl font-headline font-bold">Transforming Climate Action</h2>
+              <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
+                Our platform bridges the gap between impactful environmental projects and corporate sustainability goals.
+              </p>
             </div>
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-              <Card className="flex flex-col text-center items-center p-8">
-                  <div className="bg-accent/10 p-4 rounded-full mb-4">
-                    <Users className="h-10 w-10 text-accent" />
+            <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
+              <Card className="text-center p-6">
+                <div className="flex justify-center mb-4">
+                  <div className="bg-accent/10 p-4 rounded-full">
+                    <Shield className="h-8 w-8 text-accent" />
                   </div>
-                  <CardTitle className="font-headline text-xl">NGO / Field Worker</CardTitle>
-                  <CardDescription className="mt-2 mb-6 flex-grow">
-                    Create and manage carbon capture projects, track impact, and connect with corporate partners
-                  </CardDescription>
-                  <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    <Link href="/signup">Join as NGO</Link>
-                  </Button>
-              </Card>
-              <Card className="flex flex-col text-center items-center p-8">
-                <div className="bg-primary/10 p-4 rounded-full mb-4">
-                  <Building className="h-10 w-10 text-primary" />
                 </div>
-                <CardTitle className="font-headline text-xl">Corporate Buyer</CardTitle>
-                <CardDescription className="mt-2 mb-6 flex-grow">
-                  Offset your carbon footprint by investing in verified environmental projects worldwide
+                <CardTitle className="font-headline text-xl mb-2">Verified Projects</CardTitle>
+                <CardDescription>
+                  All projects undergo rigorous verification to ensure real, measurable impact
                 </CardDescription>
-                <Button asChild className="w-full">
-                  <Link href="/signup">Corporate Access</Link>
-                </Button>
+              </Card>
+              <Card className="text-center p-6">
+                 <div className="flex justify-center mb-4">
+                  <div className="bg-accent/10 p-4 rounded-full">
+                    <TrendingUp className="h-8 w-8 text-accent" />
+                  </div>
+                </div>
+                <CardTitle className="font-headline text-xl mb-2">Impact Tracking</CardTitle>
+                <CardDescription>
+                  Real-time monitoring and reporting of carbon capture and environmental benefits
+                </CardDescription>
+              </Card>
+              <Card className="text-center p-6">
+                 <div className="flex justify-center mb-4">
+                  <div className="bg-accent/10 p-4 rounded-full">
+                    <Globe className="h-8 w-8 text-accent" />
+                  </div>
+                </div>
+                <CardTitle className="font-headline text-xl mb-2">Global Network</CardTitle>
+                <CardDescription>
+                  Connect with projects worldwide and diversify your sustainability portfolio
+                </CardDescription>
               </Card>
             </div>
           </div>
         </section>
+
 
         {/* For Project Implementers Section */}
         <section id="for-implementers" className="py-16 md:py-24 bg-secondary/30">
@@ -160,6 +172,42 @@ export default function GetStartedPage() {
                   <span><strong className="text-primary">Powerful Admin Tools:</strong> Designed to support national standards with robust administrative and reporting tools for organizations like the NCCR.</span>
                 </li>
               </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Choose Role Section */}
+        <section id="choose-role" className="py-16 md:py-24 bg-secondary/30">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-headline font-bold">Choose Your Role</h2>
+              <p className="text-muted-foreground mt-2">Join our platform as either a project implementer or corporate buyer</p>
+            </div>
+            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+              <Card className="flex flex-col text-center items-center p-8">
+                  <div className="bg-accent/10 p-4 rounded-full mb-4">
+                    <Users className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline text-xl">NGO / Field Worker</CardTitle>
+                  <CardDescription className="mt-2 mb-6 flex-grow">
+                    Create and manage carbon capture projects, track impact, and connect with corporate partners
+                  </CardDescription>
+                  <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Link href="/signup">Join as NGO</Link>
+                  </Button>
+              </Card>
+              <Card className="flex flex-col text-center items-center p-8">
+                <div className="bg-primary/10 p-4 rounded-full mb-4">
+                  <Building className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="font-headline text-xl">Corporate Buyer</CardTitle>
+                <CardDescription className="mt-2 mb-6 flex-grow">
+                  Offset your carbon footprint by investing in verified environmental projects worldwide
+                </CardDescription>
+                <Button asChild className="w-full">
+                  <Link href="/signup">Corporate Access</Link>
+                </Button>
+              </Card>
             </div>
           </div>
         </section>
