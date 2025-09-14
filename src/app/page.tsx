@@ -1,11 +1,12 @@
 
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Leaf, Building, Droplets } from "lucide-react";
+import { ArrowRight, CheckCircle, Leaf, Building } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Badge } from "@/components/ui/badge";
+import { Droplets } from "lucide-react";
 
 export default function GetStartedPage() {
   return (
@@ -40,7 +41,7 @@ export default function GetStartedPage() {
                 style={{backgroundImage: "url('https://picsum.photos/seed/hero-bg/1800/800')"}}
                 data-ai-hint="forest landscape"
             ></div>
-          <div className="container relative">
+          <div className="container relative flex flex-col items-center justify-center">
             <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight mb-4">
               A Transparent Marketplace for <span className="text-accent">Carbon Transformation</span>
             </h1>
