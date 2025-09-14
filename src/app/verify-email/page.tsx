@@ -27,7 +27,7 @@ export default function VerifyEmailPage() {
     }
     // If auth is done loading and there's no user, redirect to login
     else if (!authLoading && !user) {
-        router.push("/");
+        router.push("/login");
     }
 
   }, [user, authLoading, router]);

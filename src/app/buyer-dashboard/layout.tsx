@@ -16,7 +16,7 @@ export default function BuyerDashboardLayout({
 
   useEffect(() => {
     if (!loading && (!user || !user.emailVerified)) {
-      router.push("/");
+      router.push("/login");
     }
   }, [user, loading, router]);
 
