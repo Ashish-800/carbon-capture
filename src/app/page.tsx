@@ -42,8 +42,7 @@ export default function GetStartedPage() {
             ></div>
           <div className="container relative">
             <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight mb-4">
-              A Transparent Marketplace for <br />
-              <span className="text-accent">Carbon Transformation</span>
+              A Transparent Marketplace for <span className="text-accent">Carbon Transformation</span>
             </h1>
             <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
               We connect high-impact environmental projects with organizations committed to sustainability, making carbon offsetting verifiable, transparent, and effective.
