@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Leaf, Building, Droplets } from "lucide-react";
+import { ArrowRight, CheckCircle, Leaf, Building } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/logo";
 
 export default function GetStartedPage() {
   return (
@@ -12,7 +13,7 @@ export default function GetStartedPage() {
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex items-center">
             <Link href="/" className="mr-6 flex items-center space-x-2">
-              <Droplets className="h-6 w-6 text-accent" />
+              <Logo className="h-8 w-8" />
               <span className="font-bold font-headline sm:inline-block">
                 Carbon Capture
               </span>

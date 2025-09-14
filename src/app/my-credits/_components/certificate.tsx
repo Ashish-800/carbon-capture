@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download, Droplets, Leaf } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 // Enriched credit type for component props
 type EnrichedCredit = {
@@ -21,7 +22,7 @@ export function Certificate({ credit }: { credit: EnrichedCredit }) {
         <div className="flex justify-between items-start">
           <div>
             <div className="flex items-center text-primary mb-1">
-                <Droplets className="h-8 w-8 mr-2 text-accent" />
+                <Logo className="h-10 w-10 mr-2" />
                 <h1 className="text-2xl font-headline font-bold">Carbon Capture</h1>
             </div>
             <p className="text-sm text-muted-foreground">Official Certificate of Carbon Credit Retirement</p>

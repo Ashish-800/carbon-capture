@@ -4,7 +4,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Leaf, Building, Droplets, Loader2 } from "lucide-react";
+import { Leaf, Building, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,6 +25,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { Logo } from "@/components/logo";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -94,7 +95,7 @@ export default function SignupPage() {
         <ThemeSwitch />
       </div>
       <div className="flex items-center justify-center mb-8 text-primary">
-        <Droplets className="h-10 w-10 mr-3 text-accent" />
+        <Logo className="h-12 w-12 mr-3" />
         <h1 className="text-4xl font-headline font-bold">Carbon Capture</h1>
       </div>
       <Card className="w-full max-w-md shadow-lg">
