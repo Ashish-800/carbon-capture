@@ -3,7 +3,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Leaf, Building, Droplets, Loader2 } from "lucide-react";
+import { Leaf, Building, Droplets, Loader2, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -76,6 +76,14 @@ export default function LoginPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 relative">
+      <div className="absolute top-4 left-4">
+        <Button asChild variant="ghost" size="icon">
+          <Link href="/">
+             <ArrowLeft className="h-5 w-5" />
+             <span className="sr-only">Back to Home</span>
+          </Link>
+        </Button>
+      </div>
       <div className="absolute top-4 right-4">
         <ThemeSwitch />
       </div>
