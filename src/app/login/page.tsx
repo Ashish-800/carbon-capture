@@ -20,7 +20,6 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -80,7 +79,7 @@ export default function LoginPage() {
         <ThemeSwitch />
       </div>
       <div className="flex items-center justify-center mb-8 text-primary">
-        <Logo className="h-12 w-12 mr-3" />
+        <Droplets className="h-12 w-12 mr-3" />
         <h1 className="text-4xl font-headline font-bold">Carbon Capture</h1>
       </div>
       <Card className="w-full max-w-md shadow-lg">
