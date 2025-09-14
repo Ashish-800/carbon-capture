@@ -2,14 +2,13 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut } from "lucide-react";
+import { LogOut, Droplets } from "lucide-react";
 import { UserNav } from "./user-nav";
 import { ThemeSwitch } from "./theme-switch";
 import { useAuth } from "@/context/auth-context";
 import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Logo } from "./logo";
 import { BackButton } from "./back-button";
 
 type HeaderProps = {
@@ -26,7 +25,7 @@ export function Header({ userRole }: HeaderProps) {
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2 text-accent">
-            <Logo />
+            <Droplets className="h-8 w-8" />
             <span className="font-bold font-headline sm:inline-block">
               Carbon Capture
             </span>
