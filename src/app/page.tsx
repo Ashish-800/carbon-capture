@@ -36,7 +36,7 @@ export default function GetStartedPage() {
         {/* Hero Section */}
         <section className="relative py-20 md:py-32 bg-secondary/30">
            <div 
-                className="absolute inset-0 bg-cover bg-center opacity-10" 
+                className="absolute inset-0 bg-cover bg-center opacity-20" 
                 style={{backgroundImage: "url('https://picsum.photos/seed/hero-blue-carbon/1800/800')"}}
                 data-ai-hint="mangrove coastline"
             ></div>
