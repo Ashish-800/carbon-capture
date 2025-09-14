@@ -1,11 +1,12 @@
 
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle, Leaf, Building } from "lucide-react";
+import { ArrowRight, CheckCircle, Leaf, Building, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Droplets } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function GetStartedPage() {
   return (
@@ -55,8 +56,44 @@ export default function GetStartedPage() {
           </div>
         </section>
 
+        {/* Choose Role Section */}
+        <section id="choose-role" className="py-16 md:py-24">
+          <div className="container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-headline font-bold">Choose Your Role</h2>
+              <p className="text-muted-foreground mt-2">Join our platform as either a project implementer or corporate buyer</p>
+            </div>
+            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+              <Card className="flex flex-col text-center items-center p-8">
+                  <div className="bg-accent/10 p-4 rounded-full mb-4">
+                    <Users className="h-10 w-10 text-accent" />
+                  </div>
+                  <CardTitle className="font-headline text-xl">NGO / Field Worker</CardTitle>
+                  <CardDescription className="mt-2 mb-6 flex-grow">
+                    Create and manage carbon capture projects, track impact, and connect with corporate partners
+                  </CardDescription>
+                  <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Link href="/signup">Join as NGO</Link>
+                  </Button>
+              </Card>
+              <Card className="flex flex-col text-center items-center p-8">
+                <div className="bg-primary/10 p-4 rounded-full mb-4">
+                  <Building className="h-10 w-10 text-primary" />
+                </div>
+                <CardTitle className="font-headline text-xl">Corporate Buyer</CardTitle>
+                <CardDescription className="mt-2 mb-6 flex-grow">
+                  Offset your carbon footprint by investing in verified environmental projects worldwide
+                </CardDescription>
+                <Button asChild className="w-full">
+                  <Link href="/signup">Corporate Access</Link>
+                </Button>
+              </Card>
+            </div>
+          </div>
+        </section>
+
         {/* For Project Implementers Section */}
-        <section id="for-implementers" className="py-16 md:py-24">
+        <section id="for-implementers" className="py-16 md:py-24 bg-secondary/30">
           <div className="container grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
               <h2 className="text-3xl font-headline font-bold mb-4">From Coastline to Carbon Credits</h2>
@@ -92,7 +129,7 @@ export default function GetStartedPage() {
         </section>
         
         {/* For Verifiers & Buyers Section */}
-        <section id="for-buyers" className="py-16 md:py-24 bg-secondary/30">
+        <section id="for-buyers" className="py-16 md:py-24">
           <div className="container grid md:grid-cols-2 gap-12 items-center">
              <div>
                 <Image 
