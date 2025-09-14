@@ -6,14 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PurchaseCredits } from "./_components/purchase-credits";
-import dynamic from "next/dynamic";
-import { Skeleton } from "@/components/ui/skeleton";
-
-const MapView = dynamic(() => import('./_components/map-view').then(mod => mod.MapView), {
-  ssr: false,
-  loading: () => <Skeleton className="h-full w-full" />,
-});
-
+import { MapView } from "./_components/map-view";
 
 export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
   const project = await getProjectById(params.id);

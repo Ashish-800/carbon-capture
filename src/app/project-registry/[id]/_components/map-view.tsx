@@ -2,6 +2,8 @@
 
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { GOOGLE_MAPS_API_KEY } from "@/lib/config";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect, useState } from "react";
 
 type MapViewProps = {
   center: {
@@ -11,6 +13,16 @@ type MapViewProps = {
 };
 
 export function MapView({ center }: MapViewProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <Skeleton className="h-full w-full" />;
+  }
+  
   if (!GOOGLE_MAPS_API_KEY) {
     return (
       <div className="h-full w-full bg-muted flex items-center justify-center">
