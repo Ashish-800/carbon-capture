@@ -37,7 +37,7 @@ export default function GetStartedPage() {
         <section className="relative py-20 md:py-32 bg-secondary/30">
            <div 
                 className="absolute inset-0 bg-cover bg-center opacity-10" 
-                style={{backgroundImage: "url('https://picsum.photos/seed/hero-bg/1800/800')"}}
+                style={{backgroundImage: "url('https://picsum.photos/seed/hero-blue-carbon/1800/800')"}}
                 data-ai-hint="mangrove coastline"
             ></div>
           <div className="container relative flex flex-col items-center justify-center text-center">
@@ -80,7 +80,7 @@ export default function GetStartedPage() {
             </div>
              <div className="order-1 md:order-2">
                 <Image 
-                    src="https://picsum.photos/seed/ngo-feature/600/400" 
+                    src="https://picsum.photos/seed/mangrove-planting/600/400" 
                     alt="Coastal community working on a restoration project" 
                     width={600}
                     height={400}
@@ -96,7 +96,7 @@ export default function GetStartedPage() {
           <div className="container grid md:grid-cols-2 gap-12 items-center">
              <div>
                 <Image 
-                    src="https://picsum.photos/seed/buyer-feature/600/400" 
+                    src="https://picsum.photos/seed/blockchain-dashboard/600/400" 
                     alt="Dashboard showing verifiable carbon data" 
                     width={600}
                     height={400}
