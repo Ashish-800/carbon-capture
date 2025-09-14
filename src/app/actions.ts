@@ -96,9 +96,39 @@ export async function completeNgoOnboardingAction(userId: string, data: any) {
             keyPerson: data.keyPersonName,
         };
         await addUserProfile(userId, userProfile);
+        revalidatePath('/profile');
         return { success: true };
     } catch (error) {
         console.error("Error completing NGO onboarding:", error);
+        return { success: false, error: "Failed to save profile information." };
+    }
+}
+
+export async function completeBuyerOnboardingAction(userId: string, data: any) {
+    try {
+        const userProfile: Omit<UserProfile, 'id'> = {
+            email: data.corporateEmail,
+            role: 'buyer',
+            displayName: data.companyName,
+            companyType: data.companyType,
+            cin: data.cin,
+            incorporationDate: data.incorporationDate,
+            address: data.registeredAddress,
+            pan: data.companyPan,
+            gstNumber: data.gstNumber,
+            industry: data.industry,
+            phone: data.corporatePhone,
+            website: data.website,
+            keyPerson: data.authPersonName,
+            authPersonDesignation: data.authPersonDesignation,
+            authPersonEmail: data.authPersonEmail,
+            authPersonPhone: data.authPersonPhone,
+        };
+        await addUserProfile(userId, userProfile);
+        revalidatePath('/profile');
+        return { success: true };
+    } catch (error) {
+        console.error("Error completing Buyer onboarding:", error);
         return { success: false, error: "Failed to save profile information." };
     }
 }

@@ -70,12 +70,11 @@ export default function SignupPage() {
         description: "A verification email has been sent to your address.",
       });
       
-      // Redirect NGO users to the detailed profile form.
-      // Redirect Buyer users to the generic email verification page.
+      // Redirect users to their respective detailed profile forms.
       if (isNgo) {
         router.push("/signup/ngo-details");
       } else {
-        router.push("/verify-email");
+        router.push("/signup/buyer-details");
       }
 
     } catch (error: any) {

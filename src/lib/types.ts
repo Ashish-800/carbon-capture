@@ -1,3 +1,4 @@
+
 export type Project = {
   id: string;
   name: string;
@@ -37,14 +38,23 @@ export type UserProfile = {
   email: string;
   role: 'ngo' | 'buyer';
   displayName: string;
-  // NGO specific fields
-  ngoType?: 'Trust' | 'Society' | 'Section 8 Company' | 'Other';
-  registrationNumber?: string;
-  pan?: string;
   address?: string;
   website?: string;
   keyPerson?: string;
+  pan?: string;
+  phone?: string;
+
+  // NGO specific fields
+  ngoType?: 'Trust' | 'Society' | 'Section 8 Company' | 'Other';
+  registrationNumber?: string;
+  
   // Buyer specific fields
-  companyName?: string;
-  department?: string;
+  companyType?: 'Private Limited' | 'Public Limited' | 'LLP' | 'Partnership' | 'Other';
+  cin?: string;
+  incorporationDate?: string;
+  gstNumber?: string;
+  industry?: string;
+  authPersonDesignation?: string;
+  authPersonEmail?: string;
+  authPersonPhone?: string;
 };

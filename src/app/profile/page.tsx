@@ -5,11 +5,12 @@ import { useAuth } from "@/context/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Building, Globe, Mail, Phone, User, FileText, Landmark } from "lucide-react";
+import { Loader2, Building, Globe, Mail, Phone, User, FileText, Landmark, Briefcase, Calendar, Hash, Factory, Pencil } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { getUserProfile } from "@/lib/db";
 import type { UserProfile } from "@/lib/types";
+import { format } from "date-fns";
 
 const DetailRow = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | undefined | null }) => (
     <div className="grid grid-cols-3 gap-4 items-start">
@@ -52,7 +53,7 @@ export default function ProfilePage() {
   if (!user || !profile) {
        return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
-        <p className="text-muted-foreground">Could not load user profile.</p>
+        <p className="text-muted-foreground">Could not load user profile. Please complete your profile submission.</p>
       </div>
     );
   }
@@ -61,17 +62,8 @@ export default function ProfilePage() {
   const userRole = isNgo ? "NGO / Field Worker" : "Corporate Buyer";
   const userInitials = profile.displayName ? profile.displayName.substring(0, 2).toUpperCase() : "NA";
   
-  // Mock data for buyer - this would be fetched from the DB in a real app
-   const buyerData = {
-      name: "Global Tech Inc.",
-      role: "Sustainability Lead",
-      department: "Corporate Social Responsibility",
-      address: "456 Innovation Drive, Silicon Valley, CA",
-      website: "https://globaltech.com",
-  };
-
   return (
-    <div className="container mx-auto max-w-3xl py-10">
+    <div className="container mx-auto max-w-4xl py-10">
       <div className="space-y-2 mb-8">
         <h1 className="text-3xl font-headline font-bold tracking-tight">
           My Profile
@@ -87,7 +79,7 @@ export default function ProfilePage() {
             <AvatarFallback className="text-xl">{userInitials}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="font-headline text-2xl">{isNgo ? profile.displayName : buyerData.name}</CardTitle>
+            <CardTitle className="font-headline text-2xl">{profile.displayName}</CardTitle>
             <CardDescription>
               <Badge variant="secondary" className="mt-2">{userRole}</Badge>
             </CardDescription>
@@ -103,7 +95,7 @@ export default function ProfilePage() {
              <DetailRow icon={User} label="User ID" value={user.uid} />
             <Separator />
              <div className="space-y-1 pt-2">
-                <p className="text-sm font-medium text-muted-foreground">Organization Details</p>
+                <p className="text-sm font-medium text-muted-foreground">{isNgo ? 'Organization Details' : 'Company Details'}</p>
             </div>
             {isNgo ? (
                 <div className="space-y-4">
@@ -116,10 +108,22 @@ export default function ProfilePage() {
                 </div>
             ) : (
                  <div className="space-y-4">
-                    <DetailRow icon={User} label="Your Role" value={buyerData.role} />
-                    <DetailRow icon={Building} label="Department" value={buyerData.department} />
-                    <DetailRow icon={Phone} label="Office Address" value={buyerData.address} />
-                    <DetailRow icon={Globe} label="Company Website" value={buyerData.website} />
+                    <DetailRow icon={Building} label="Company Type" value={profile.companyType} />
+                    <DetailRow icon={Hash} label="CIN" value={profile.cin} />
+                    <DetailRow icon={Calendar} label="Incorporation Date" value={profile.incorporationDate ? format(new Date(profile.incorporationDate), 'PPP') : '-'} />
+                    <DetailRow icon={Factory} label="Industry" value={profile.industry} />
+                    <DetailRow icon={Landmark} label="Corporate PAN" value={profile.pan} />
+                    <DetailRow icon={FileText} label="GST Number" value={profile.gstNumber} />
+                    <DetailRow icon={Phone} label="Registered Address" value={profile.address} />
+                    <DetailRow icon={Globe} label="Company Website" value={profile.website} />
+                    <Separator />
+                    <div className="space-y-1 pt-2">
+                      <p className="text-sm font-medium text-muted-foreground">Authorized Person</p>
+                    </div>
+                     <DetailRow icon={User} label="Name" value={profile.keyPerson} />
+                     <DetailRow icon={Briefcase} label="Designation" value={profile.authPersonDesignation} />
+                     <DetailRow icon={Mail} label="Email" value={profile.authPersonEmail} />
+                     <DetailRow icon={Phone} label="Phone" value={profile.authPersonPhone} />
                 </div>
             )}
         </CardContent>
