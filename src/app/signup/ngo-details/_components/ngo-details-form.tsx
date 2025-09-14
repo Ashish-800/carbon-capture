@@ -182,119 +182,120 @@ export function NgoDetailsForm() {
            <Progress value={progress} className="w-full mt-4" />
         </CardHeader>
         <CardContent>
-             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                 {currentStep === 0 && (
-                     <div className="space-y-4">
-                        <FormField control={form.control} name="ngoName" render={({ field }) => (
-                            <FormItem><FormLabel>NGO Name (as per registration certificate)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <FormField control={form.control} name="ngoType" render={({ field }) => (
-                            <FormItem><FormLabel>Type of NGO</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                    <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="Trust">Trust</SelectItem>
-                                        <SelectItem value="Society">Society</SelectItem>
-                                        <SelectItem value="Section 8 Company">Section 8 Company</SelectItem>
-                                        <SelectItem value="Other">Other</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            <FormMessage /></FormItem>
-                        )} />
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <FormField control={form.control} name="registrationNumber" render={({ field }) => (
-                                <FormItem><FormLabel>Registration Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="registrationDate" render={({ field }) => (
-                                <FormItem><FormLabel>Registration Date</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                         <FormField control={form.control} name="registrationAct" render={({ field }) => (
-                            <FormItem><FormLabel>Act under which registered</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                     </div>
-                 )}
-                  {currentStep === 1 && (
-                     <div className="space-y-4">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <FormField control={form.control} name="pan" render={({ field }) => (
-                                <FormItem><FormLabel>PAN of NGO</FormLabel><FormControl><Input placeholder="ABCDE1234F" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="taxDeductionAccount" render={({ field }) => (
-                                <FormItem><FormLabel>12A / 80G Details (if applicable)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                         </div>
-                        <FormField control={form.control} name="fcraNumber" render={({ field }) => (
-                                <FormItem><FormLabel>FCRA Number (if applicable)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <FileUploadField name="registrationCertificate" label="Registration Certificate" control={form.control} />
-                            <FileUploadField name="trustDeed" label="Trust Deed / MoA" control={form.control} />
-                            <FileUploadField name="ngoPanCard" label="NGO PAN Card" control={form.control} />
-                        </div>
-                     </div>
-                 )}
-                 {currentStep === 2 && (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {currentStep === 0 && (
                     <div className="space-y-4">
-                         <FormField control={form.control} name="registeredAddress" render={({ field }) => (
-                            <FormItem><FormLabel>Registered Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                         <FileUploadField name="addressProof" label="Office Address Proof" control={form.control} />
-                        <FormField control={form.control} name="mailingAddress" render={({ field }) => (
-                            <FormItem><FormLabel>Mailing Address (if different)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <FormField control={form.control} name="email" render={({ field }) => (
-                                <FormItem><FormLabel>Official Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="phone" render={({ field }) => (
-                                <FormItem><FormLabel>Official Phone</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                         </div>
-                         <FormField control={form.control} name="website" render={({ field }) => (
-                            <FormItem><FormLabel>Website / Social Media</FormLabel><FormControl><Input placeholder="https://" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
+                      <FormField control={form.control} name="ngoName" render={({ field }) => (
+                          <FormItem><FormLabel>NGO Name (as per registration certificate)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="ngoType" render={({ field }) => (
+                          <FormItem><FormLabel>Type of NGO</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl><SelectTrigger><SelectValue /></SelectTrigger></FormControl>
+                                  <SelectContent>
+                                      <SelectItem value="Trust">Trust</SelectItem>
+                                      <SelectItem value="Society">Society</SelectItem>
+                                      <SelectItem value="Section 8 Company">Section 8 Company</SelectItem>
+                                      <SelectItem value="Other">Other</SelectItem>
+                                  </SelectContent>
+                              </Select>
+                          <FormMessage /></FormItem>
+                      )} />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField control={form.control} name="registrationNumber" render={({ field }) => (
+                              <FormItem><FormLabel>Registration Number</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                          <FormField control={form.control} name="registrationDate" render={({ field }) => (
+                              <FormItem><FormLabel>Registration Date</FormLabel><FormControl><Input type="date" {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                      </div>
+                        <FormField control={form.control} name="registrationAct" render={({ field }) => (
+                          <FormItem><FormLabel>Act under which registered</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
                     </div>
-                 )}
-                 {currentStep === 3 && (
-                     <div className="space-y-4">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                             <FormField control={form.control} name="keyPersonName" render={({ field }) => (
-                                <FormItem><FormLabel>Founder / President Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                             <FormField control={form.control} name="keyPersonDesignation" render={({ field }) => (
-                                <FormItem><FormLabel>Designation</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
+                )}
+                  {currentStep === 1 && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField control={form.control} name="pan" render={({ field }) => (
+                              <FormItem><FormLabel>PAN of NGO</FormLabel><FormControl><Input placeholder="ABCDE1234F" {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                          <FormField control={form.control} name="taxDeductionAccount" render={({ field }) => (
+                              <FormItem><FormLabel>12A / 80G Details (if applicable)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
                         </div>
-                        <FormField control={form.control} name="keyPersonContact" render={({ field }) => (
-                            <FormItem><FormLabel>Contact Details (Phone)</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
-                        )} />
-                        <FileUploadField name="keyPersonIdProof" label="Identity & Address Proof of Member" control={form.control} />
+                      <FormField control={form.control} name="fcraNumber" render={({ field }) => (
+                              <FormItem><FormLabel>FCRA Number (if applicable)</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          <FileUploadField name="registrationCertificate" label="Registration Certificate" control={form.control} />
+                          <FileUploadField name="trustDeed" label="Trust Deed / MoA" control={form.control} />
+                          <FileUploadField name="ngoPanCard" label="NGO PAN Card" control={form.control} />
+                      </div>
                     </div>
-                 )}
+                )}
+                {currentStep === 2 && (
+                  <div className="space-y-4">
+                        <FormField control={form.control} name="registeredAddress" render={({ field }) => (
+                          <FormItem><FormLabel>Registered Office Address</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                        <FileUploadField name="addressProof" label="Office Address Proof" control={form.control} />
+                      <FormField control={form.control} name="mailingAddress" render={({ field }) => (
+                          <FormItem><FormLabel>Mailing Address (if different)</FormLabel><FormControl><Textarea {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField control={form.control} name="email" render={({ field }) => (
+                              <FormItem><FormLabel>Official Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                            <FormField control={form.control} name="phone" render={({ field }) => (
+                              <FormItem><FormLabel>Official Phone</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                        </div>
+                        <FormField control={form.control} name="website" render={({ field }) => (
+                          <FormItem><FormLabel>Website / Social Media</FormLabel><FormControl><Input placeholder="https://" {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                  </div>
+                )}
+                {currentStep === 3 && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <FormField control={form.control} name="keyPersonName" render={({ field }) => (
+                              <FormItem><FormLabel>Founder / President Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                            <FormField control={form.control} name="keyPersonDesignation" render={({ field }) => (
+                              <FormItem><FormLabel>Designation</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                          )} />
+                      </div>
+                      <FormField control={form.control} name="keyPersonContact" render={({ field }) => (
+                          <FormItem><FormLabel>Contact Details (Phone)</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FileUploadField name="keyPersonIdProof" label="Identity & Address Proof of Member" control={form.control} />
+                  </div>
+                )}
 
-                <div className="flex justify-between items-center pt-4">
-                    {currentStep > 0 && (
-                        <Button type="button" variant="outline" onClick={prevStep}>
-                            <ArrowLeft className="mr-2" /> Previous
-                        </Button>
-                    )}
-                    <div className="flex-grow"></div>
-                    {currentStep < steps.length - 1 && (
-                         <Button type="button" onClick={nextStep}>
-                            Next <ArrowRight className="ml-2" />
-                        </Button>
-                    )}
-                    {currentStep === steps.length - 1 && (
-                         <Button type="submit" disabled={isSubmitting}>
-                            {isSubmitting && <Loader2 className="mr-2 animate-spin" />}
-                            Submit for Verification
-                        </Button>
-                    )}
-                </div>
-            </form>
-        </CardContent>
-      </Card>
+              <div className="flex justify-between items-center pt-4">
+                  {currentStep > 0 && (
+                      <Button type="button" variant="outline" onClick={prevStep}>
+                          <ArrowLeft className="mr-2" /> Previous
+                      </Button>
+                  )}
+                  <div className="flex-grow"></div>
+                  {currentStep < steps.length - 1 && (
+                        <Button type="button" onClick={nextStep}>
+                          Next <ArrowRight className="ml-2" />
+                      </Button>
+                  )}
+                  {currentStep === steps.length - 1 && (
+                        <Button type="submit" disabled={isSubmitting}>
+                          {isSubmitting && <Loader2 className="mr-2 animate-spin" />}
+                          Submit for Verification
+                      </Button>
+                  )}
+              </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
-
