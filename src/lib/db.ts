@@ -9,8 +9,9 @@ import {
   query,
   where,
   addDoc,
+  setDoc,
 } from "firebase/firestore";
-import type { Project, CarbonCredit } from "@/lib/types";
+import type { Project, CarbonCredit, UserProfile } from "@/lib/types";
 
 // A helper function to convert Firestore Timestamps to Dates
 const convertTimestampToDate = (data: DocumentData): any => {
@@ -48,6 +49,43 @@ const docToCredit = (
     ...convertedData,
   } as CarbonCredit;
 };
+
+const docToUserProfile = (
+  doc: QueryDocumentSnapshot<DocumentData> | DocumentData
+): UserProfile => {
+  const data = doc.data();
+  const convertedData = convertTimestampToDate(data);
+  return {
+    id: doc.id,
+    ...convertedData,
+  } as UserProfile;
+};
+
+
+export async function addUserProfile(userId: string, data: Omit<UserProfile, 'id'>) {
+    try {
+        const userDocRef = doc(db, "users", userId);
+        await setDoc(userDocRef, data);
+    } catch (error) {
+        console.error("Error adding user profile:", error);
+        throw new Error("Could not add user profile to the database.");
+    }
+}
+
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+    try {
+        const userDocRef = doc(db, "users", userId);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            return docToUserProfile(userDoc);
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error fetching user profile with ID ${userId}:`, error);
+        return null;
+    }
+}
+
 
 export async function addProject(projectData: Omit<Project, 'id'>): Promise<Project> {
   try {

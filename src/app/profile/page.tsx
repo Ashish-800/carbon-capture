@@ -7,8 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Building, Globe, Mail, Phone, User, FileText, Landmark } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { useEffect, useState } from "react";
+import { getUserProfile } from "@/lib/db";
+import type { UserProfile } from "@/lib/types";
 
-const DetailRow = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | undefined }) => (
+const DetailRow = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | undefined | null }) => (
     <div className="grid grid-cols-3 gap-4 items-start">
         <div className="col-span-1 flex items-center text-sm text-muted-foreground">
             <Icon className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -22,32 +25,44 @@ const DetailRow = ({ icon: Icon, label, value }: { icon: React.ElementType, labe
 
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
-  if (loading || !user) {
+  useEffect(() => {
+    async function fetchProfile() {
+      if (user) {
+        setLoadingProfile(true);
+        const userProfile = await getUserProfile(user.uid);
+        setProfile(userProfile);
+        setLoadingProfile(false);
+      }
+    }
+    fetchProfile();
+  }, [user]);
+
+  if (authLoading || loadingProfile) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
+  
+  if (!user || !profile) {
+       return (
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+        <p className="text-muted-foreground">Could not load user profile.</p>
+      </div>
+    );
+  }
 
-  const isNgo = user.displayName?.includes("NGO");
+  const isNgo = profile.role === "ngo";
   const userRole = isNgo ? "NGO / Field Worker" : "Corporate Buyer";
-  const userInitials = isNgo ? "NA" : "SL";
-
-  // Mock data - in a real app, this would be fetched from a 'users' or 'organizations' collection in Firestore.
-  const ngoData = {
-    name: "Amazonas Alive",
-    type: "Non-Governmental Organization",
-    regNumber: "REG/2021/XYZ/123",
-    pan: "ABCDE1234F",
-    address: "123 Rainforest Lane, Manaus, Brazil",
-    website: "https://amazonasalive.org",
-    keyPerson: "Dr. Elena Vasquez",
-  };
-
-  const buyerData = {
+  const userInitials = profile.displayName ? profile.displayName.substring(0, 2).toUpperCase() : "NA";
+  
+  // Mock data for buyer - this would be fetched from the DB in a real app
+   const buyerData = {
       name: "Global Tech Inc.",
       role: "Sustainability Lead",
       department: "Corporate Social Responsibility",
@@ -72,7 +87,7 @@ export default function ProfilePage() {
             <AvatarFallback className="text-xl">{userInitials}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="font-headline text-2xl">{isNgo ? ngoData.name : buyerData.name}</CardTitle>
+            <CardTitle className="font-headline text-2xl">{isNgo ? profile.displayName : buyerData.name}</CardTitle>
             <CardDescription>
               <Badge variant="secondary" className="mt-2">{userRole}</Badge>
             </CardDescription>
@@ -92,12 +107,12 @@ export default function ProfilePage() {
             </div>
             {isNgo ? (
                 <div className="space-y-4">
-                    <DetailRow icon={Building} label="Organization Type" value={ngoData.type} />
-                    <DetailRow icon={FileText} label="Registration No." value={ngoData.regNumber} />
-                    <DetailRow icon={Landmark} label="PAN" value={ngoData.pan} />
-                    <DetailRow icon={Phone} label="Registered Address" value={ngoData.address} />
-                    <DetailRow icon={Globe} label="Website" value={ngoData.website} />
-                    <DetailRow icon={User} label="Key Contact" value={ngoData.keyPerson} />
+                    <DetailRow icon={Building} label="Organization Type" value={profile.ngoType} />
+                    <DetailRow icon={FileText} label="Registration No." value={profile.registrationNumber} />
+                    <DetailRow icon={Landmark} label="PAN" value={profile.pan} />
+                    <DetailRow icon={Phone} label="Registered Address" value={profile.address} />
+                    <DetailRow icon={Globe} label="Website" value={profile.website} />
+                    <DetailRow icon={User} label="Key Contact" value={profile.keyPerson} />
                 </div>
             ) : (
                  <div className="space-y-4">

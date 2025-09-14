@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { estimateCarbonCapture, EstimateCarbonCaptureInput } from '@/ai/flows/carbon-capture-estimation';
 import { sendEmail } from '@/ai/flows/send-email';
-import type { CarbonCredit, Project } from '@/lib/types';
+import type { CarbonCredit, Project, UserProfile } from '@/lib/types';
 import { generateCertificateHtml } from '@/lib/generate-certificate-html';
-import { addProject } from "@/lib/db";
+import { addProject, addUserProfile } from "@/lib/db";
 
 export async function getCarbonCaptureEstimation(input: EstimateCarbonCaptureInput) {
   try {
@@ -66,7 +66,7 @@ export async function createProjectAction(projectData: CreateProjectData) {
             // Default values for fields that are determined later in the process
             creditsAvailable: 0,
             ndvi: 0.65, // Using a mock average NDVI
-            estimatedCarbonCapture: 15, // Using a mock average
+            estimatedCarbonCapture: 15, // Using a mock average,
         };
 
         const newProject = await addProject(newProjectData);
@@ -79,5 +79,26 @@ export async function createProjectAction(projectData: CreateProjectData) {
     } catch (error) {
         console.error("Error creating project:", error);
         return { success: false, error: "Failed to create project." };
+    }
+}
+
+export async function completeNgoOnboardingAction(userId: string, data: any) {
+    try {
+        const userProfile: Omit<UserProfile, 'id'> = {
+            email: data.email,
+            role: 'ngo',
+            displayName: data.ngoName,
+            ngoType: data.ngoType,
+            registrationNumber: data.registrationNumber,
+            pan: data.pan,
+            address: data.registeredAddress,
+            website: data.website,
+            keyPerson: data.keyPersonName,
+        };
+        await addUserProfile(userId, userProfile);
+        return { success: true };
+    } catch (error) {
+        console.error("Error completing NGO onboarding:", error);
+        return { success: false, error: "Failed to save profile information." };
     }
 }

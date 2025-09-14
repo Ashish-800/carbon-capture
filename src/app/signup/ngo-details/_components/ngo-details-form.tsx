@@ -4,7 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -29,14 +29,16 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { UploadCloud, Loader2, CheckCircle, ArrowRight, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/auth-context";
+import { completeNgoOnboardingAction } from "@/app/actions";
 
 const MAX_FILE_SIZE = 5000000; // 5MB
 const ACCEPTED_FILE_TYPES = ["application/pdf", "image/jpeg", "image/jpg", "image/png"];
 
 const fileSchema = z.any()
-  .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+  .refine((file) => !file || file.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
   .refine(
-    (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+    (file) => !file || ACCEPTED_FILE_TYPES.includes(file.type),
     "Only .jpg, .jpeg, .png and .pdf files are accepted."
   ).optional();
 
@@ -112,8 +114,9 @@ const FileUploadField = ({ name, label, control }: { name: keyof z.infer<typeof 
 export function NgoDetailsForm() {
   const { toast } = useToast();
   const router = useRouter();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -128,7 +131,7 @@ export function NgoDetailsForm() {
       fcraNumber: "",
       registeredAddress: "",
       mailingAddress: "",
-      email: "",
+      email: user?.email || "",
       phone: "",
       website: "",
       keyPersonName: "",
@@ -154,22 +157,37 @@ export function NgoDetailsForm() {
       }
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true);
-    // Here you would typically handle file uploads to a storage service
-    // and then save the form data to your database.
-    console.log("Form submitted with values:", values);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    startTransition(async () => {
+        if (!user) {
+            toast({
+                variant: "destructive",
+                title: "Authentication Error",
+                description: "You must be logged in to submit this form.",
+            });
+            return;
+        }
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    toast({
-        title: "Profile Submitted!",
-        description: "Your NGO details have been submitted for verification.",
-        action: <CheckCircle className="text-green-500" />,
+        // We are not handling file uploads yet, so we'll exclude file fields.
+        const { registrationCertificate, trustDeed, ngoPanCard, addressProof, keyPersonIdProof, ...formData } = values;
+
+        const result = await completeNgoOnboardingAction(user.uid, formData);
+
+        if (result.success) {
+            toast({
+                title: "Profile Submitted!",
+                description: "Your NGO details have been submitted for verification.",
+                action: <CheckCircle className="text-green-500" />,
+            });
+            router.push('/ngo-dashboard');
+        } else {
+             toast({
+                variant: "destructive",
+                title: "Submission Failed",
+                description: result.error,
+            });
+        }
     });
-    router.push('/ngo-dashboard');
   }
   
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -246,7 +264,7 @@ export function NgoDetailsForm() {
                       )} />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <FormField control={form.control} name="email" render={({ field }) => (
-                              <FormItem><FormLabel>Official Email</FormLabel><FormControl><Input type="email" {...field} /></FormControl><FormMessage /></FormItem>
+                              <FormItem><FormLabel>Official Email</FormLabel><FormControl><Input type="email" {...field} disabled /></FormControl><FormMessage /></FormItem>
                           )} />
                             <FormField control={form.control} name="phone" render={({ field }) => (
                               <FormItem><FormLabel>Official Phone</FormLabel><FormControl><Input type="tel" {...field} /></FormControl><FormMessage /></FormItem>
@@ -276,7 +294,7 @@ export function NgoDetailsForm() {
 
               <div className="flex justify-between items-center pt-4">
                   {currentStep > 0 && (
-                      <Button type="button" variant="outline" onClick={prevStep}>
+                      <Button type="button" variant="outline" onClick={prevStep} disabled={isSubmitting}>
                           <ArrowLeft className="mr-2" /> Previous
                       </Button>
                   )}

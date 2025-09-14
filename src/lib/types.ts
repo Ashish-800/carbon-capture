@@ -31,3 +31,20 @@ export type CarbonCredit = {
   purchaseDate: Date;
   tonnesCO2: number;
 };
+
+export type UserProfile = {
+  id: string; // Firebase Auth UID
+  email: string;
+  role: 'ngo' | 'buyer';
+  displayName: string;
+  // NGO specific fields
+  ngoType?: 'Trust' | 'Society' | 'Section 8 Company' | 'Other';
+  registrationNumber?: string;
+  pan?: string;
+  address?: string;
+  website?: string;
+  keyPerson?: string;
+  // Buyer specific fields
+  companyName?: string;
+  department?: string;
+};
