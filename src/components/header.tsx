@@ -9,7 +9,7 @@ import { useAuth } from "@/context/auth-context";
 import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { BackButton } from "./back-button";
+import { HomeButton } from "./home-button";
 
 type HeaderProps = {
   userRole: 'ngo' | 'buyer';
@@ -30,7 +30,7 @@ export function Header({ userRole }: HeaderProps) {
               Carbon Capture
             </span>
           </Link>
-          <BackButton />
+          <HomeButton />
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link
               href={dashboardLink}
