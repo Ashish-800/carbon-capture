@@ -8,10 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Loader2, Building, Globe, Mail, Phone, User, FileText, Landmark } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
-const DetailRow = ({ icon, label, value }: { icon: React.ElementType, label: string, value: string | undefined }) => (
+const DetailRow = ({ icon: Icon, label, value }: { icon: React.ElementType, label: string, value: string | undefined }) => (
     <div className="grid grid-cols-3 gap-4 items-start">
         <div className="col-span-1 flex items-center text-sm text-muted-foreground">
-            <props.icon className="h-4 w-4 mr-2 flex-shrink-0" />
+            <Icon className="h-4 w-4 mr-2 flex-shrink-0" />
             <span>{label}</span>
         </div>
         <div className="col-span-2 text-sm text-primary break-words">
