@@ -5,7 +5,6 @@ import { ArrowRight, CheckCircle, Leaf, Building } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { Badge } from "@/components/ui/badge";
 import { Droplets } from "lucide-react";
 
 export default function GetStartedPage() {
@@ -35,18 +34,18 @@ export default function GetStartedPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 text-center bg-secondary/30">
+        <section className="relative py-20 md:py-32 bg-secondary/30">
            <div 
                 className="absolute inset-0 bg-cover bg-center opacity-10" 
                 style={{backgroundImage: "url('https://picsum.photos/seed/hero-bg/1800/800')"}}
-                data-ai-hint="forest landscape"
+                data-ai-hint="mangrove coastline"
             ></div>
-          <div className="container relative flex flex-col items-center justify-center">
+          <div className="container relative flex flex-col items-center justify-center text-center">
             <h1 className="text-4xl md:text-6xl font-headline font-bold tracking-tight mb-4">
-              A Transparent Marketplace for <span className="text-accent">Carbon Transformation</span>
+              A Decentralized MRV Platform for <span className="text-accent">Blue Carbon Ecosystems</span>
             </h1>
             <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
-              We connect high-impact environmental projects with organizations committed to sustainability, making carbon offsetting verifiable, transparent, and effective.
+              Leveraging Blockchain for a transparent, accurate, and verifiable system to monitor, report, and verify blue carbon restoration projects across India.
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
               <Link href="/signup">
@@ -56,74 +55,72 @@ export default function GetStartedPage() {
           </div>
         </section>
 
-        {/* For NGOs Section */}
-        <section id="for-ngos" className="py-16 md:py-24">
+        {/* For Project Implementers Section */}
+        <section id="for-implementers" className="py-16 md:py-24">
           <div className="container grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
-              <Badge variant="secondary" className="mb-2">For Project Developers</Badge>
-              <h2 className="text-3xl font-headline font-bold mb-4">From Project to Planet's Progress</h2>
+              <h2 className="text-3xl font-headline font-bold mb-4">From Coastline to Carbon Credits</h2>
               <p className="text-muted-foreground mb-6">
-                Our platform provides the tools you need to get your carbon capture projects verified, funded, and recognized. Showcase your impact and connect with a global network of supporters.
+                Onboard your organization—whether you're an NGO, a community group, or a coastal panchayat—and contribute to a verifiable climate solution. Our platform provides the tools to manage and monetize your blue carbon projects transparently.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">Streamlined Verification:</strong> Submit your project details through our guided process for transparent verification.</span>
+                  <span><strong className="text-primary">Immutable Data Registry:</strong> Securely store plantation and restoration data on the blockchain, ensuring complete transparency and trust.</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">AI-Powered Insights:</strong> Leverage our AI tools to get preliminary estimates on your project's carbon capture potential.</span>
+                  <span><strong className="text-primary">Seamless Field Data Upload:</strong> Integrate data from mobile apps and drones to provide accurate, real-time updates on project progress.</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">Access Funding:</strong> List your verified projects on our registry to sell carbon credits to corporate buyers worldwide.</span>
+                  <span><strong className="text-primary">Tokenized Carbon Credits:</strong> Convert your verified carbon sequestration into tradable digital assets using smart contracts.</span>
                 </li>
               </ul>
             </div>
              <div className="order-1 md:order-2">
                 <Image 
                     src="https://picsum.photos/seed/ngo-feature/600/400" 
-                    alt="NGOs planting trees" 
+                    alt="Coastal community working on a restoration project" 
                     width={600}
                     height={400}
                     className="rounded-lg shadow-lg"
-                    data-ai-hint="people planting trees"
+                    data-ai-hint="people planting mangroves"
                 />
             </div>
           </div>
         </section>
         
-        {/* For Buyers Section */}
+        {/* For Verifiers & Buyers Section */}
         <section id="for-buyers" className="py-16 md:py-24 bg-secondary/30">
           <div className="container grid md:grid-cols-2 gap-12 items-center">
              <div>
                 <Image 
                     src="https://picsum.photos/seed/buyer-feature/600/400" 
-                    alt="Sustainable corporate building" 
+                    alt="Dashboard showing verifiable carbon data" 
                     width={600}
                     height={400}
                     className="rounded-lg shadow-lg"
-                    data-ai-hint="sustainable business"
+                    data-ai-hint="data dashboard analytics"
                 />
             </div>
             <div>
-              <Badge variant="secondary" className="mb-2">For Corporate Buyers</Badge>
-              <h2 className="text-3xl font-headline font-bold mb-4">Invest in a Sustainable Future</h2>
+              <h2 className="text-3xl font-headline font-bold mb-4">Invest with Confidence</h2>
               <p className="text-muted-foreground mb-6">
-                Achieve your sustainability goals by supporting high-quality, verified carbon projects. Our platform makes it easy to find, fund, and track your environmental impact.
+                Support high-quality blue carbon projects with an unprecedented level of transparency. Our blockchain-powered registry ensures that every carbon credit is verifiable, accurately reported, and contributes directly to India’s climate strategy.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">Verified Project Registry:</strong> Browse a diverse portfolio of thoroughly vetted carbon capture projects.</span>
+                  <span><strong className="text-primary">Verifiable Impact:</strong> Access an immutable audit trail for every project, from data collection to credit issuance.</span>
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">Transparent Reporting:</strong> Receive digital certificates for every credit purchased and track your organization's total CO₂ offset.</span>
+                  <span><strong className="text-primary">Smart Contract Automation:</strong> Carbon credits are tokenized and managed through secure smart contracts, ensuring fair and transparent transactions.</span>
                 </li>
                  <li className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-accent mr-3 mt-1 flex-shrink-0" />
-                  <span><strong className="text-primary">Tangible Impact:</strong> Confidently invest in projects that make a real difference for the planet and local communities.</span>
+                  <span><strong className="text-primary">Powerful Admin Tools:</strong> Designed to support national standards with robust administrative and reporting tools for organizations like the NCCR.</span>
                 </li>
               </ul>
             </div>
