@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Leaf, Building } from "lucide-react";
 import Image from "next/image";
@@ -49,7 +50,7 @@ export default function GetStartedPage() {
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
               <Link href="/signup">
-                Get Started Today <ArrowRight className="ml-2" />
+                Get Started <ArrowRight className="ml-2" />
               </Link>
             </Button>
           </div>
