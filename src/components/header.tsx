@@ -34,6 +34,7 @@ export function Header({ userRole }: HeaderProps) {
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link
               href={dashboardLink}
+              prefetch={true}
               className="transition-colors hover:text-foreground/80 text-foreground"
             >
               Dashboard
@@ -41,6 +42,7 @@ export function Header({ userRole }: HeaderProps) {
             {isNgo ? (
                <Link
                 href="/new-project"
+                prefetch={true}
                 className="transition-colors hover:text-foreground/80 text-foreground/60"
                >
                  New Project
@@ -49,12 +51,14 @@ export function Header({ userRole }: HeaderProps) {
               <>
                 <Link
                   href="/project-registry"
+                  prefetch={true}
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
                   Project Registry
                 </Link>
                  <Link
                   href="/my-credits"
+                  prefetch={true}
                   className="transition-colors hover:text-foreground/80 text-foreground/60"
                 >
                   My Credits

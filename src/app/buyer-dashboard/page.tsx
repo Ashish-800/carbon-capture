@@ -9,8 +9,8 @@ import { DollarSign, Leaf, CheckCircle, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PortfolioChart } from "./_components/portfolio-chart";
-import { ProjectsMapView } from "@/components/projects-map-view";
 import { getProjects } from "@/lib/db";
+import { DashboardMap } from "./_components/dashboard-map";
 
 export default async function BuyerDashboardPage() {
   const allProjects = await getProjects();
@@ -92,7 +92,7 @@ export default async function BuyerDashboardPage() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="h-96 w-full">
-              <ProjectsMapView projects={portfolioProjects} />
+              <DashboardMap projects={portfolioProjects} />
             </div>
           </CardContent>
         </Card>
