@@ -1,44 +1,17 @@
-import type {NextConfig} from 'next';
+import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
+  reactStrictMode: true,
+  experimental: {
+    // enable any experimental features you rely on here:
+    appDir: true
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+    // add domains you load remote images from, e.g. if you use external imagery
+    domains: ["images.unsplash.com", "raw.githubusercontent.com"],
+    formats: ["image/avif", "image/webp"]
   },
-  // Allow cross-origin requests from the development environment
-  // This is necessary for Firebase Studio's preview to work correctly.
-  ...(process.env.NODE_ENV === 'development' && {
-    experimental: {
-      allowedDevOrigins: [
-        '6000-firebase-studio-1757515084674.cluster-73qgvk7hjjadkrjeyexca5ivva.cloudworkstations.dev',
-      ],
-    },
-  }),
+  // small optimization for headers/caching you can add later
 };
 
 export default nextConfig;
