@@ -1,154 +1,97 @@
-import { db } from "@/lib/firebase";
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  DocumentData,
-  QueryDocumentSnapshot,
-  query,
-  where,
-  addDoc,
-  setDoc,
-} from "firebase/firestore";
 import type { Project, CarbonCredit, UserProfile } from "@/lib/types";
 
-// A helper function to convert Firestore Timestamps to Dates
-const convertTimestampToDate = (data: DocumentData): any => {
-  if (!data) return data;
-  for (const key in data) {
-    if (data[key]?.toDate && typeof data[key].toDate === "function") {
-      data[key] = data[key].toDate();
-    } else if (typeof data[key] === 'object' && data[key] !== null) {
-      // Recursively convert nested objects
-      convertTimestampToDate(data[key]);
-    }
+// Mock Data Storage
+let projects: Project[] = [
+  {
+    id: "project-1",
+    name: "Sundarbans Mangrove Restoration",
+    location: { lat: 21.9497, lng: 89.1833 },
+    locationName: "Sundarbans, West Bengal",
+    restorationType: "Reforestation",
+    plantationDate: new Date("2023-01-15"),
+    description: "Restoring the critical mangrove ecosystem in the Sundarbans delta to protect against cyclones and sequester carbon.",
+    ngo: {
+      id: "ngo_1",
+      name: "Green Bengal Foundation",
+      logoUrl: "https://picsum.photos/seed/ngo1/50/50"
+    },
+    status: "Verified",
+    imageUrl: "https://picsum.photos/seed/sundarbans/800/600",
+    imageHint: "mangrove forest",
+    creditsAvailable: 5000,
+    ndvi: 0.75,
+    estimatedCarbonCapture: 25.5
+  },
+  {
+    id: "project-2",
+    name: "Kerala Backwaters Blue Carbon",
+    location: { lat: 9.9312, lng: 76.2673 },
+    locationName: "Kochi, Kerala",
+    restorationType: "Reforestation",
+    plantationDate: new Date("2023-03-10"),
+    description: "Preserving seagrass beds and mangroves along the Kerala coast to enhance marine biodiversity.",
+    ngo: {
+      id: "ngo_2",
+      name: "Kerala Coastal Trust",
+      logoUrl: "https://picsum.photos/seed/ngo2/50/50"
+    },
+    status: "Pending Verification",
+    imageUrl: "https://picsum.photos/seed/kerala/800/600",
+    imageHint: "kerala backwaters",
+    creditsAvailable: 0,
+    ndvi: 0.68,
+    estimatedCarbonCapture: 18.2
   }
-  return data;
-};
+];
 
-// A helper function to convert a Firestore document to our Project type
-const docToProject = (
-  doc: QueryDocumentSnapshot<DocumentData> | DocumentData
-): Project => {
-  const data = doc.data();
-  const convertedData = convertTimestampToDate(data);
-  return {
-    id: doc.id,
-    ...convertedData,
-  } as Project;
-};
+let users: UserProfile[] = [];
+let credits: CarbonCredit[] = [];
 
-const docToCredit = (
-  doc: QueryDocumentSnapshot<DocumentData> | DocumentData
-): CarbonCredit => {
-  const data = doc.data();
-  const convertedData = convertTimestampToDate(data);
-  return {
-    id: doc.id,
-    ...convertedData,
-  } as CarbonCredit;
-};
-
-const docToUserProfile = (
-  doc: QueryDocumentSnapshot<DocumentData> | DocumentData
-): UserProfile => {
-  const data = doc.data();
-  const convertedData = convertTimestampToDate(data);
-  return {
-    id: doc.id,
-    ...convertedData,
-  } as UserProfile;
-};
-
+// Helper to simulate network delay
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function addUserProfile(userId: string, data: Omit<UserProfile, 'id'>) {
-    try {
-        const userDocRef = doc(db, "users", userId);
-        await setDoc(userDocRef, data);
-    } catch (error) {
-        console.error("Error adding user profile:", error);
-        throw new Error("Could not add user profile to the database.");
-    }
+  await delay(500);
+  const newUser: UserProfile = { id: userId, ...data };
+  const existingIndex = users.findIndex(u => u.id === userId);
+  if (existingIndex >= 0) {
+    users[existingIndex] = newUser;
+  } else {
+    users.push(newUser);
+  }
 }
 
 export async function getUserProfile(userId: string): Promise<UserProfile | null> {
-    try {
-        const userDocRef = doc(db, "users", userId);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-            return docToUserProfile(userDoc);
-        }
-        return null;
-    } catch (error) {
-        console.error(`Error fetching user profile with ID ${userId}:`, error);
-        return null;
-    }
+  await delay(300);
+  return users.find(u => u.id === userId) || null;
 }
 
-
 export async function addProject(projectData: Omit<Project, 'id'>): Promise<Project> {
-  try {
-    const projectsCol = collection(db, "projects");
-    const docRef = await addDoc(projectsCol, projectData);
-    return {
-      id: docRef.id,
-      ...projectData,
-    };
-  } catch (error) {
-    console.error("Error adding project:", error);
-    throw new Error("Could not add project to the database.");
-  }
+  await delay(500);
+  const newProject: Project = {
+    id: `project-${Date.now()}`,
+    ...projectData
+  };
+  projects.push(newProject);
+  return newProject;
 }
 
 export async function getProjects(): Promise<Project[]> {
-  try {
-    const projectsCol = collection(db, "projects");
-    const projectSnapshot = await getDocs(projectsCol);
-    const projectList = projectSnapshot.docs.map(docToProject);
-    return projectList;
-  } catch (error) {
-    console.error("Error fetching projects:", error);
-    return [];
-  }
+  await delay(300);
+  return [...projects];
 }
 
 export async function getProjectById(id: string): Promise<Project | null> {
-  try {
-    const projectDocRef = doc(db, "projects", id);
-    const projectDoc = await getDoc(projectDocRef);
-    if (projectDoc.exists()) {
-      return docToProject(projectDoc);
-    }
-    return null;
-  } catch (error) {
-    console.error(`Error fetching project with ID ${id}:`, error);
-    return null;
-  }
+  await delay(300);
+  return projects.find(p => p.id === id) || null;
 }
 
 export async function getCreditsByBuyer(buyerId: string): Promise<CarbonCredit[]> {
-    try {
-        const creditsCol = collection(db, "credits");
-        const q = query(creditsCol, where("buyerId", "==", buyerId));
-        const creditSnapshot = await getDocs(q);
-        const creditList = creditSnapshot.docs.map(docToCredit);
-        return creditList;
-    } catch (error) {
-        console.error(`Error fetching credits for buyer ${buyerId}:`, error);
-        return [];
-    }
+  await delay(300);
+  return credits.filter(c => c.buyerId === buyerId);
 }
 
 export async function getProjectsByNgo(ngoId: string): Promise<Project[]> {
-    try {
-        const projectsCol = collection(db, "projects");
-        const q = query(projectsCol, where("ngo.id", "==", ngoId));
-        const projectSnapshot = await getDocs(q);
-        const projectList = projectSnapshot.docs.map(docToProject);
-        return projectList;
-    } catch (error) {
-        console.error(`Error fetching projects for NGO ${ngoId}:`, error);
-        return [];
-    }
+  await delay(300);
+  return projects.filter(p => p.ngo.id === ngoId);
 }

@@ -8,8 +8,7 @@
  * - EstimateCarbonCaptureOutput - The return type for the estimateCarbonCapture function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+import { z } from 'zod';
 
 const EstimateCarbonCaptureInputSchema = z.object({
   ndviData: z
@@ -43,47 +42,12 @@ export type EstimateCarbonCaptureOutput = z.infer<typeof EstimateCarbonCaptureOu
 export async function estimateCarbonCapture(
   input: EstimateCarbonCaptureInput
 ): Promise<EstimateCarbonCaptureOutput> {
-  return estimateCarbonCaptureFlow(input);
+  // Mock implementation to avoid Genkit dependency issues
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  return {
+    estimatedCarbonCapture: 12.5 + (input.ndviData * 10),
+    confidenceLevel: "Medium",
+    supportingData: "Estimated based on regional averages and provided NDVI data (Mock)."
+  };
 }
-
-const estimateCarbonCapturePrompt = ai.definePrompt({
-  name: 'estimateCarbonCapturePrompt',
-  input: {schema: EstimateCarbonCaptureInputSchema},
-  output: {
-    format: 'json',
-    schema: EstimateCarbonCaptureOutputSchema,
-  },
-  prompt: `You are an expert in carbon capture estimation, using satellite-derived NDVI data and NCCR (National Carbon Accounting Report) guidelines.
-
-  Based on the following information, estimate the carbon capture potential of the project.
-
-  NDVI Data: {{{ndviData}}}
-  Restoration Type: {{{restorationType}}}
-  Plantation Date: {{{plantationDate}}}
-  Project Location: {{{projectLocation}}}
-
-  Consider the NCCR guidelines and the specific characteristics of the restoration type to provide an accurate estimation.
-
-  Provide the estimated carbon capture potential in tonnes per hectare per year, a confidence level for the estimation, and a summary of the data and methodology used.
-  
-  Please provide the output in the following JSON format:
-  
-  {
-    "estimatedCarbonCapture": <number>,
-    "confidenceLevel": "<High|Medium|Low>",
-    "supportingData": "<string>"
-  }
-`,
-});
-
-const estimateCarbonCaptureFlow = ai.defineFlow(
-  {
-    name: 'estimateCarbonCaptureFlow',
-    inputSchema: EstimateCarbonCaptureInputSchema,
-    outputSchema: EstimateCarbonCaptureOutputSchema,
-  },
-  async input => {
-    const {output} = await estimateCarbonCapturePrompt(input);
-    return output!;
-  }
-);

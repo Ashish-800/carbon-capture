@@ -13,8 +13,6 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartYAxis,
-  ChartXAxis,
 } from "@/components/ui/chart"
 
 const chartData = [
@@ -41,25 +39,25 @@ const chartConfig = {
 
 export function PortfolioChart() {
   return (
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <BarChart accessibilityLayer data={chartData}>
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="month"
-            tickLine={false}
-            tickMargin={10}
-            axisLine={false}
-            tickFormatter={(value) => value.slice(0, 3)}
-          />
-          <YAxis 
-             tickLine={false}
-             axisLine={false}
-             tickMargin={10}
-             label={{ value: 'Tonnes CO₂', angle: -90, position: 'insideLeft', offset: -5 }}
-          />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="offset" fill="var(--color-offset)" radius={4} />
-        </BarChart>
-      </ChartContainer>
+    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
+      <BarChart accessibilityLayer data={chartData}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          tickMargin={10}
+          axisLine={false}
+          tickFormatter={(value) => value.slice(0, 3)}
+        />
+        <YAxis
+          tickLine={false}
+          axisLine={false}
+          tickMargin={10}
+          label={{ value: 'Tonnes CO₂', angle: -90, position: 'insideLeft', offset: -5 }}
+        />
+        <ChartTooltip content={<ChartTooltipContent />} />
+        <Bar dataKey="offset" fill="var(--color-offset)" radius={4} />
+      </BarChart>
+    </ChartContainer>
   )
 }

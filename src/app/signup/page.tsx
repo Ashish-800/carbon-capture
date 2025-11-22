@@ -20,16 +20,12 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useToast } from "@/hooks/use-toast";
-import {
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-  updateProfile,
-} from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@/context/auth-context";
 
 export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const { signIn } = useAuth();
   const [role, setRole] = React.useState("ngo");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -48,29 +44,16 @@ export default function SignupPage() {
     }
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      
-      const user = userCredential.user;
-      
-      const isNgo = role === 'ngo';
-      // Set displayName to distinguish between user roles
-      await updateProfile(user, {
-        displayName: isNgo ? 'NGO User' : 'Buyer User',
-      });
-      
-      // Send verification email to the new user
-      await sendEmailVerification(user);
-      
+      // Simulate signup by just signing in
+      await signIn(email);
+
       toast({
         title: "Account Created!",
-        description: "A verification email has been sent to your address.",
+        description: "Welcome to Carbon Capture.",
       });
-      
+
       // Redirect users to their respective detailed profile forms.
+      const isNgo = role === 'ngo';
       if (isNgo) {
         router.push("/signup/ngo-details");
       } else {
@@ -91,10 +74,10 @@ export default function SignupPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background p-4 relative">
       <div className="absolute top-4 left-4">
-         <Button asChild variant="ghost" size="icon">
+        <Button asChild variant="ghost" size="icon">
           <Link href="/">
-             <ArrowLeft className="h-5 w-5" />
-             <span className="sr-only">Back to Home</span>
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Back to Home</span>
           </Link>
         </Button>
       </div>
@@ -114,7 +97,7 @@ export default function SignupPage() {
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
-             <div className="space-y-2">
+            <div className="space-y-2">
               <Label>Select Your Role</Label>
               <RadioGroup
                 defaultValue="ngo"
@@ -169,7 +152,7 @@ export default function SignupPage() {
                 placeholder="••••••••"
               />
             </div>
-             <div className="space-y-2">
+            <div className="space-y-2">
               <Label htmlFor="confirm-password">Confirm Password</Label>
               <Input
                 id="confirm-password"

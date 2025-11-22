@@ -15,7 +15,7 @@ export default function NgoDashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && (!user || !user.emailVerified)) {
+    if (!loading && !user) {
       router.push("/login");
     }
   }, [user, loading, router]);

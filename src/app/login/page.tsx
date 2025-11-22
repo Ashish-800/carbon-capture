@@ -17,8 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { useAuth } from "@/context/auth-context";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 
@@ -28,20 +27,16 @@ export default function LoginPage() {
   const [email, setEmail] = React.useState("demo@example.com");
   const [password, setPassword] = React.useState("password");
   const [loading, setLoading] = React.useState(false);
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signIn } = useAuth();
 
   React.useEffect(() => {
     if (!authLoading && user) {
-        if (user.emailVerified) {
-             // A simple way to distinguish roles without custom claims for now
-            if (user.displayName?.includes("NGO")) {
-                router.push("/ngo-dashboard");
-            } else {
-                router.push("/buyer-dashboard");
-            }
-        } else {
-            router.push("/verify-email");
-        }
+      // A simple way to distinguish roles without custom claims for now
+      if (user.displayName?.includes("NGO")) {
+        router.push("/ngo-dashboard");
+      } else {
+        router.push("/buyer-dashboard");
+      }
     }
   }, [user, authLoading, router]);
 
@@ -49,11 +44,8 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (!userCredential.user.emailVerified) {
-        router.push("/verify-email");
-      }
-      // The useEffect hook will handle redirection for verified users.
+      await signIn(email);
+      // The signIn function handles redirection.
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -67,7 +59,7 @@ export default function LoginPage() {
 
   if (authLoading || user) {
     return (
-       <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
         <p className="mt-4 text-muted-foreground">Loading...</p>
       </div>
@@ -79,8 +71,8 @@ export default function LoginPage() {
       <div className="absolute top-4 left-4">
         <Button asChild variant="ghost" size="icon">
           <Link href="/">
-             <ArrowLeft className="h-5 w-5" />
-             <span className="sr-only">Back to Home</span>
+            <ArrowLeft className="h-5 w-5" />
+            <span className="sr-only">Back to Home</span>
           </Link>
         </Button>
       </div>
@@ -113,9 +105,9 @@ export default function LoginPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password" 
+              <Input
+                id="password"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}

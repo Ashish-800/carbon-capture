@@ -34,12 +34,12 @@ export function PurchaseCredits({ project }: { project: Project }) {
   const [isPurchasing, setIsPurchasing] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
-  
+
   const handlePurchase = async () => {
     setIsPurchasing(true);
     // Simulate credit ID generation and API call
     const newCreditId = `BCC-${project.id.toUpperCase()}-${Date.now().toString().slice(-6)}`;
-    
+
     // In a real app, you would get the buyer's email from their session.
     // For this prototype, we'll use a mock email.
     const buyerEmail = 'lead@globaltech.com';
@@ -50,10 +50,11 @@ export function PurchaseCredits({ project }: { project: Project }) {
       projectId: project.id,
       projectName: project.name,
       buyer: buyerName,
+      buyerId: 'mock-buyer-id-123', // Added mock buyer ID
       purchaseDate: new Date(),
       tonnesCO2: quantity,
     };
-    
+
     try {
       await sendCertificateEmailAction(creditData, project, buyerEmail);
       setCreditId(newCreditId);
@@ -63,13 +64,13 @@ export function PurchaseCredits({ project }: { project: Project }) {
         description: "Your certificate has been sent to your email.",
       });
     } catch (error) {
-       toast({
+      toast({
         variant: "destructive",
         title: "Email Failed",
         description: "Could not send the certificate email.",
       });
     } finally {
-        setIsPurchasing(false);
+      setIsPurchasing(false);
     }
   };
 
@@ -77,7 +78,7 @@ export function PurchaseCredits({ project }: { project: Project }) {
     setIsDialogOpen(false);
     router.push('/my-credits');
   }
-  
+
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   }
@@ -104,10 +105,10 @@ export function PurchaseCredits({ project }: { project: Project }) {
           />
         </div>
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handlePurchase} disabled={isPurchasing}>
-              {isPurchasing && <Loader2 className="mr-2 animate-spin" />}
-              Purchase Credits
-            </Button>
+          <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={handlePurchase} disabled={isPurchasing}>
+            {isPurchasing && <Loader2 className="mr-2 animate-spin" />}
+            Purchase Credits
+          </Button>
           <AlertDialogContent>
             <AlertDialogHeader>
               <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 mb-4">
@@ -118,7 +119,7 @@ export function PurchaseCredits({ project }: { project: Project }) {
                 You have successfully purchased {quantity} carbon credits from the project "{project.name}".
                 <br /><br />
                 Your unique Credit Token ID is:
-                 <p className="font-mono text-primary bg-secondary p-2 rounded-md my-2 text-sm">{creditId}</p>
+                <p className="font-mono text-primary bg-secondary p-2 rounded-md my-2 text-sm">{creditId}</p>
                 A certificate has been generated and sent to your email for your records.
               </AlertDialogDescription>
             </AlertDialogHeader>
@@ -130,9 +131,9 @@ export function PurchaseCredits({ project }: { project: Project }) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-         <p className="text-xs text-center text-muted-foreground">
-            This is a simulated transaction. No real payment is required.
-          </p>
+        <p className="text-xs text-center text-muted-foreground">
+          This is a simulated transaction. No real payment is required.
+        </p>
       </CardContent>
     </Card>
   );
